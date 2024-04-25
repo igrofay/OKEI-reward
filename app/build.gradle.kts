@@ -33,6 +33,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.11"
+    }
 }
 
 dependencies {
@@ -55,7 +62,7 @@ dependencies {
     // Orbit MVI
     implementation("org.orbit-mvi:orbit-compose:7.1.0")
     // Kodein
-    implementation("org.kodein.di:kodein-di-framework-compose:7.21.1")
+    implementation("org.kodein.di:kodein-di-framework-compose:7.20.0")
     // Navigation compose
     implementation("androidx.navigation:navigation-compose:2.7.7")
     // Test
