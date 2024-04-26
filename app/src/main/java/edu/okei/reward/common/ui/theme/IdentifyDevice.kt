@@ -10,9 +10,9 @@ fun identifyDevice() : TypeDevise{
     val screenWidthDp  = LocalConfiguration.current.screenWidthDp
     val type = remember(screenWidthDp) {
         when{
-            screenWidthDp<=TypeDevise.Phone.maxWidth->TypeDevise.Phone
-            screenWidthDp<=TypeDevise.Table.maxWidth-> TypeDevise.Table
-            screenWidthDp<=TypeDevise.TV.maxWidth-> TypeDevise.TV
+            screenWidthDp<=TypeDevise.Phone.maxWidthDp->TypeDevise.Phone
+            screenWidthDp<=TypeDevise.Table.maxWidthDp-> TypeDevise.Table
+            screenWidthDp<=TypeDevise.TV.maxWidthDp-> TypeDevise.TV
             else -> TypeDevise.Large
         }
     }

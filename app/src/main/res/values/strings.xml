@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">OKEI reward</string>
+    <string name="no_rights">Нет прав</string>
+    <string name="user_not_found">Пользователь не найден</string>
+    <string name="wrong_password">Неправильный пароль</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
@@ -33,7 +34,7 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val activity = LocalContext.current as? Activity
-    SideEffect {
+    LaunchedEffect(isDark){
         activity?.window?.let { window->
             WindowCompat
                 .getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !isDark

@@ -5,4 +5,6 @@ import org.kodein.di.DI
 val CoreModule by DI.Module{
     import(ReposModule)
     import(NetworkModule)
+    import(DatabaseModule)
+    import(UseCaseModule)
 }

@@ -1,9 +1,11 @@
 package edu.okei.reward.common.ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import edu.okei.reward.R
 
 private val gilroy = FontFamily(
@@ -19,5 +21,19 @@ private val gilroy = FontFamily(
 )
 val Typography = Typography(
     defaultFontFamily = gilroy,
-
+    // EditText
+    body2 = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 18.sp,
+        lineHeight = 18.sp,
+        letterSpacing = 0.25.sp,
+        fontFamily = gilroy,
+    ),
+    button = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        lineHeight = 18.sp,
+        letterSpacing = 0.25.sp,
+        fontFamily = gilroy
+    ),
 )
