@@ -6,4 +6,7 @@
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
     <string name="sign_in">Войти</string>
+    <string name="calendar_plan">Календарный план</string>
+    <string name="last_change">Последнее изменение</string>
+    <string name="no">Нет</string>
 </resources>

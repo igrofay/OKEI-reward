@@ -1,6 +1,8 @@
 package edu.okei.core.dependency_injection
 import android.util.Log
 import edu.okei.core.data.data_source.network.AuthApi
+import edu.okei.core.data.data_source.network.StatsApi
+import edu.okei.core.domain.repos.UserRepos
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.HttpRequestRetry
@@ -9,6 +11,8 @@ import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.plugin
+import io.ktor.client.request.header
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.kodein.di.DI
@@ -42,7 +46,7 @@ internal val NetworkModule by DI.Module {
             .apply {
                 plugin(HttpSend).intercept { request ->
                     Log.d("$AUTHORIZED_CLIENT::intercept::request", request.url.toString())
-//                    request.header(HttpHeaders.Authorization, instance<UserRepos>().getAccessToken())
+                    request.header(HttpHeaders.Authorization, instance<UserRepos>().getAccessToken())
                     execute(request).apply {
                         Log.d(
                             "$AUTHORIZED_CLIENT::intercept::answer",
@@ -55,7 +59,9 @@ internal val NetworkModule by DI.Module {
     bindProvider {
         AuthApi(instance<HttpClient>(BASE_CLIENT))
     }
-
+    bindProvider {
+        StatsApi(instance<HttpClient>(AUTHORIZED_CLIENT))
+    }
 }
 
 private fun httpClient(urlServer: String) = HttpClient(Android) {
@@ -67,7 +73,7 @@ private fun httpClient(urlServer: String) = HttpClient(Android) {
         })
     }
     install(HttpRequestRetry) {
-        retryOnServerErrors(maxRetries = 3)
+        retryOnServerErrors(maxRetries = 2)
         exponentialDelay()
     }
     install(HttpCache)

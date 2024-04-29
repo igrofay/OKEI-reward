@@ -2,11 +2,9 @@ package edu.okei.core.data.repos
 
 import edu.okei.core.data.body.auth.AuthBody.Companion.toAuthBody
 import edu.okei.core.data.body.auth.TokenBody
-import edu.okei.core.data.body.auth.TokenBody.Companion.toTokenBody
 import edu.okei.core.data.body.auth.UserTokenInfoBody
 import edu.okei.core.data.data_source.network.AuthApi
 import edu.okei.core.domain.model.auth.AuthModel
-import edu.okei.core.domain.model.auth.TokenModel
 import edu.okei.core.domain.model.auth.UserTokenInfoModel
 import edu.okei.core.domain.model.errors.AppErrors
 import edu.okei.core.domain.model.errors.AuthError
@@ -29,13 +27,12 @@ internal class AuthReposImpl(
         return Result.failure(error)
     }
 
-    override suspend fun updateUserInfo(model: TokenModel): Result<TokenModel> {
-        val result = authApi.updateToken(model.toTokenBody())
+    override suspend fun updateUserInfo(token: String): Result<UserTokenInfoModel> {
+        val result = authApi.updateToken(TokenBody(token))
         val error = when(result.status){
             HttpStatusCode.OK->
-                return Result.success(result.body<TokenBody>())
-            HttpStatusCode.BadRequest-> AuthError.WrongPassword
-            HttpStatusCode.NotFound -> AuthError.UserNotFound
+                return Result.success(result.body<UserTokenInfoBody>())
+            HttpStatusCode.NotFound -> AuthError.BadToken
             else-> AppErrors.UnhandledError(result.status.toString())
         }
         return Result.failure(error)

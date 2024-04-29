@@ -53,7 +53,7 @@ class AuthVM(
         authUseCase.execute(state.prepare()).fold(
             onSuccess = { role ->
                 when(role){
-                    UserRole.Appraiser -> AuthSideEffect.OpenAppraiserContent
+                    UserRole.Appraiser -> postSideEffect(AuthSideEffect.OpenAppraiserContent)
                     else -> showMessage(R.string.no_rights)
                 }
             },
@@ -71,7 +71,7 @@ class AuthVM(
                 showMessage(R.string.user_not_found)
             AuthError.WrongPassword->
                 showMessage(R.string.wrong_password)
-            else -> Log.e(nameVM, er.message!!, er)
+            else -> Log.e(nameVM, er.message, er)
         }
     }
 }

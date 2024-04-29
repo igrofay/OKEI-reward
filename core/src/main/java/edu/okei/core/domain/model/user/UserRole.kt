@@ -8,7 +8,7 @@ enum class UserRole(val id: Int){
 
     companion object{
         fun getRole(id: Int): UserRole {
-            return entries.find { userRole -> userRole.id == id }!!
+            return entries.find { userRole -> userRole.id == id } ?: Undefined
         }
     }
 

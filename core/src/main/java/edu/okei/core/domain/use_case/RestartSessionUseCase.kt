@@ -1,18 +1,17 @@
 package edu.okei.core.domain.use_case
 
-import edu.okei.core.domain.model.auth.AuthModel
-import edu.okei.core.domain.model.errors.AppErrors
 import edu.okei.core.domain.model.user.UserRole
 import edu.okei.core.domain.repos.AuthRepos
 import edu.okei.core.domain.repos.UserRepos
-import kotlinx.coroutines.flow.last
 
-class AuthUseCase(
+class RestartSessionUseCase(
     private val userRepos: UserRepos,
     private val authRepos: AuthRepos,
 ) {
-    suspend fun execute(authModel: AuthModel) : Result<UserRole>{
-        val result = authRepos.authorization(authModel)
+    suspend fun execute() : Result<UserRole>{
+        val token = userRepos.getRefreshToken()
+            ?: return Result.success(UserRole.Undefined)
+        val result = authRepos.updateUserInfo(token)
         return result.map { userTokenInfo->
             userRepos.updateUserTokenInfo(userTokenInfo)
             userTokenInfo.role

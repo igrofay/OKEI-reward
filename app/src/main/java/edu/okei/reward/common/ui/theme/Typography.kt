@@ -29,11 +29,34 @@ val Typography = Typography(
         letterSpacing = 0.25.sp,
         fontFamily = gilroy,
     ),
+    // Text Button
     button = TextStyle(
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.W300,
         fontSize = 18.sp,
         lineHeight = 18.sp,
         letterSpacing = 0.25.sp,
+        fontFamily = gilroy
+    ),
+    // AppTopBar
+    h6 = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 20.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp,
+        fontFamily = gilroy,
+    ),
+    h5 = TextStyle(
+        fontWeight = FontWeight.W800,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp,
+        fontFamily = gilroy,
+    ),
+    caption = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.4.sp,
         fontFamily = gilroy
     ),
 )

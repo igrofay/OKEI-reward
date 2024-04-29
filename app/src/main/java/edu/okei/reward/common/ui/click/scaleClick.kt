@@ -23,7 +23,7 @@ fun Modifier.scaleClick(enabled: Boolean = true, minScale: Float = 0.9f,onClick:
         label = "anim scale button",
     )
     val alphaAnim by animateFloatAsState(
-        targetValue = if (enabled) 1f else 0.6f,
+        targetValue = if (enabled) 1f else 0f,
         label = "anim alpha button"
     )
     this

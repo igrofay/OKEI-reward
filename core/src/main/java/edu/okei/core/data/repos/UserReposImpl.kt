@@ -33,10 +33,10 @@ internal class UserReposImpl(
 
     override fun updateUserTokenInfo(userTokenInfo: UserTokenInfoModel) {
         preferences.edit {
-            putInt(KEY_USER_ROLE, userTokenInfo.role)
+            putInt(KEY_USER_ROLE, userTokenInfo.role.id)
             putString(KEY_ACCESS_TOKEN, userTokenInfo.tokenPair.accessToken)
             putString(KEY_REFRESH_TOKEN, userTokenInfo.tokenPair.refreshToken)
         }
-        stateUserRole.value = UserRole.getRole(userTokenInfo.role)
+        stateUserRole.value = userTokenInfo.role
     }
 }

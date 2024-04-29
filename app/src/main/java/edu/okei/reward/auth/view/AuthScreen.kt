@@ -58,13 +58,7 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@Preview(device = "id:pixel_7", showBackground = true)
-@Composable
-fun PreviewAuthScreen() {
-    AuthScreen(
-        openAppraiserContent = {}
-    )
-}
+
 @Composable
 fun AuthScreen(
     openAppraiserContent: ()->Unit
@@ -85,100 +79,5 @@ fun AuthScreen(
                 .show()
         }
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                MaterialTheme.colors.backgroundStartScreen
-            )
-    ){
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
-        ){
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .scale(scaleX = 1.5f, scaleY = 1f)
-                    .background(
-                        Color.White,
-                        RoundedCornerShape(
-                            topEnd = CornerSize(0),
-                            topStart = CornerSize(0),
-                            bottomStart = CornerSize(50),
-                            bottomEnd = CornerSize(50)
-                        )
-                    )
-            )
-            Image(
-                painter = if (MaterialTheme.colors.isLight)
-                    painterResource(R.drawable.ic_degital_marketing_light)
-                else
-                    painterResource(R.drawable.ic_degital_marketing_dark),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(0.7f),
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            EditText(
-                value = state.login,
-                onValueChange = {
-                    authVM.onEvent(AuthEvent.InputLogin(it))
-                },
-                hint = stringResource(R.string.login),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Email,
-                )
-
-            )
-            Spacer(
-                modifier = Modifier.height(
-                    MaterialTheme.dimensions.grid_3_5 * 1.5f
-                )
-            )
-            EditText(
-                value = state.password,
-                onValueChange = {
-                    authVM.onEvent(AuthEvent.InputPassword(it))
-                },
-                hint = stringResource(R.string.password),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Send,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Password,
-                ),
-                keyboardActions = KeyboardActions { authVM.onEvent(AuthEvent.SignIn) },
-                visualTransformation = PasswordVisualTransformation()
-            )
-            Spacer(
-                modifier = Modifier.height(
-                    MaterialTheme.dimensions.grid_5_5 * 1.5f
-                )
-            )
-            CustomButton(
-                text = stringResource(R.string.sign_in),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f),
-                textStyle = MaterialTheme.typography.button
-                    .copy(color = MaterialTheme.colors.backgroundStartScreen)
-            ){
-                authVM.onEvent(AuthEvent.SignIn)
-            }
-        }
-    }
-
+    AuthContent(state, authVM)
 }
