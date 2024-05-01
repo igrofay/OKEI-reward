@@ -13,7 +13,9 @@ import org.kodein.di.DIAware
 import org.kodein.di.instance
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.container
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 
 class CalendarPlanVM(
@@ -43,6 +45,13 @@ class CalendarPlanVM(
     }
 
     override fun onEvent(event: CalendarPlanEvent) {
-
+        when(event){
+            CalendarPlanEvent.SeeCriteria -> blockingIntent {
+                postSideEffect(CalendarPlanSideEffect.OpenCriteria)
+            }
+            CalendarPlanEvent.SeeTeacher -> blockingIntent {
+                postSideEffect(CalendarPlanSideEffect.OpenTeachers)
+            }
+        }
     }
 }

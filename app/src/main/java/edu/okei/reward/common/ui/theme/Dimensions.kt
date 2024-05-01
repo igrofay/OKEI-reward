@@ -29,6 +29,7 @@ data class Dimensions(
 //    val font_5: TextUnit = 24.sp*coefficient,
 //    val font_6_5: TextUnit = 30.sp*coefficient,
     val borderSmall: Dp = 1.dp*coefficient,
+    val borderMedium: Dp = 2.dp * coefficient
 )
 val MaterialTheme.dimensions
     @Composable

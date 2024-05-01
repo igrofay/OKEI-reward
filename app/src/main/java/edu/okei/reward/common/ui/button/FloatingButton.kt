@@ -1,6 +1,7 @@
 package edu.okei.reward.common.ui.button
 
 import android.service.autofill.OnClickAction
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ fun FloatingButton(
                 MaterialTheme.colors.primary,
                 CircleShape
             )
+            .background(MaterialTheme.colors.background, CircleShape)
             .padding(MaterialTheme.dimensions.grid_3_5),
         contentAlignment = Alignment.Center,
     ){

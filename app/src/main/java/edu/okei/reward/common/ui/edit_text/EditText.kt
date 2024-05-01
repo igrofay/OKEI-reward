@@ -56,7 +56,7 @@ fun EditText(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    textStyle: TextStyle = MaterialTheme.typography.body2.copy(
+    textStyle: TextStyle = MaterialTheme.typography.body1.copy(
         color = Color.White,
         textAlign = TextAlign.Center
     ),

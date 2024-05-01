@@ -3,8 +3,10 @@ package edu.okei.core.dependency_injection
 import android.content.SharedPreferences
 import edu.okei.core.data.data_source.network.AuthApi
 import edu.okei.core.data.data_source.network.StatsApi
+import edu.okei.core.data.data_source.network.TeacherApi
 import edu.okei.core.data.repos.AuthReposImpl
 import edu.okei.core.data.repos.StatisticReposImpl
+import edu.okei.core.data.repos.TeachersReposImpl
 import edu.okei.core.data.repos.UserReposImpl
 import edu.okei.core.domain.repos.AuthRepos
 import edu.okei.core.domain.repos.StatisticRepos
@@ -24,5 +26,8 @@ internal val ReposModule by DI.Module{
     }
     bindProvider<StatisticRepos>{
         StatisticReposImpl(instance<StatsApi>())
+    }
+    bindProvider {
+        TeachersReposImpl(instance<TeacherApi>())
     }
 }

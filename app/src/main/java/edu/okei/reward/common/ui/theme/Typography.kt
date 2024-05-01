@@ -22,10 +22,17 @@ private val gilroy = FontFamily(
 val Typography = Typography(
     defaultFontFamily = gilroy,
     // EditText
-    body2 = TextStyle(
+    body1 = TextStyle(
         fontWeight = FontWeight.W300,
         fontSize = 18.sp,
         lineHeight = 18.sp,
+        letterSpacing = 0.25.sp,
+        fontFamily = gilroy,
+    ),
+    body2 = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 14.sp,
+        lineHeight = 14.sp,
         letterSpacing = 0.25.sp,
         fontFamily = gilroy,
     ),
@@ -59,4 +66,12 @@ val Typography = Typography(
         letterSpacing = 0.4.sp,
         fontFamily = gilroy
     ),
+    overline = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 10.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.sp,
+        fontFamily = gilroy
+
+    )
 )

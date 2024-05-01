@@ -9,4 +9,11 @@
     <string name="calendar_plan">Календарный план</string>
     <string name="last_change">Последнее изменение</string>
     <string name="no">Нет</string>
+    <string name="list_of_teachers">Список преподавателей</string>
+    <string name="search">Поиск</string>
+    <string name="undefined">Неопределен</string>
+    <string name="director">Директор</string>
+    <string name="appraiser">Оценщик</string>
+    <string name="teacher">Учитель</string>
+    <string name="user_role">Роль пользователя</string>
 </resources>
