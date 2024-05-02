@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import edu.okei.reward.R
 import edu.okei.reward.auth.model.AuthEvent
@@ -31,9 +32,11 @@ import edu.okei.reward.auth.model.AuthState
 import edu.okei.reward.common.ui.button.CustomButton
 import edu.okei.reward.common.ui.edit_text.EditText
 import edu.okei.reward.common.ui.theme.AppTheme
+import edu.okei.reward.common.ui.theme.Gray200
 import edu.okei.reward.common.ui.theme.backgroundStartScreen
 import edu.okei.reward.common.ui.theme.dimensions
 import edu.okei.reward.common.view_model.EventBase
+
 @Preview(device = "id:pixel_7", showBackground = true)
 @Composable
 private fun PreviewAuthScreen() {
@@ -44,24 +47,25 @@ private fun PreviewAuthScreen() {
         )
     }
 }
+
 @Composable
 fun AuthContent(
     state: AuthState,
     event: EventBase<AuthEvent>
 ) {
     Column(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(
-            MaterialTheme.colors.backgroundStartScreen
-        )
-    ){
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                MaterialTheme.colors.backgroundStartScreen
+            )
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -104,8 +108,12 @@ fun AuthContent(
                     imeAction = ImeAction.Next,
                     autoCorrect = false,
                     keyboardType = KeyboardType.Email,
-                )
-
+                ),
+                borderColor = Gray200,
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = Gray200,
+                    textAlign = TextAlign.Center
+                ),
             )
             Spacer(
                 modifier = Modifier.height(
@@ -126,7 +134,12 @@ fun AuthContent(
                     keyboardType = KeyboardType.Password,
                 ),
                 keyboardActions = KeyboardActions { event.onEvent(AuthEvent.SignIn) },
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                borderColor = Gray200,
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = Gray200,
+                    textAlign = TextAlign.Center
+                ),
             )
             Spacer(
                 modifier = Modifier.height(
@@ -138,8 +151,9 @@ fun AuthContent(
                 modifier = Modifier
                     .fillMaxWidth(0.8f),
                 textStyle = MaterialTheme.typography.button
-                    .copy(color = MaterialTheme.colors.backgroundStartScreen)
-            ){
+                    .copy(color = MaterialTheme.colors.backgroundStartScreen),
+                background = Gray200
+            ) {
                 event.onEvent(AuthEvent.SignIn)
             }
         }

@@ -57,9 +57,10 @@ fun EditText(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     textStyle: TextStyle = MaterialTheme.typography.body1.copy(
-        color = Color.White,
+        color = MaterialTheme.colors.primary,
         textAlign = TextAlign.Center
     ),
+    borderColor: Color = MaterialTheme.colors.primary
 ) {
     BasicTextField(
         value = value,
@@ -77,7 +78,7 @@ fun EditText(
                 .fillMaxWidth()
                 .border(
                     MaterialTheme.dimensions.borderSmall,
-                    Gray200,
+                    borderColor,
                     MaterialTheme.shapes.medium
                 )
                 .padding(paddingValues),

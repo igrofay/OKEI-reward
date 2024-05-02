@@ -15,27 +15,23 @@ import io.ktor.http.HttpStatusCode
 internal class AuthReposImpl(
     private val authApi: AuthApi
 ) : AuthRepos{
-    override suspend fun authorization(model: AuthModel): Result<UserTokenInfoModel> {
+    override suspend fun authorization(model: AuthModel): Result<UserTokenInfoModel> = runCatching{
         val result = authApi.authorization(model.toAuthBody())
-        val error = when(result.status){
-            HttpStatusCode.OK->
-                return Result.success(result.body<UserTokenInfoBody>())
-            HttpStatusCode.BadRequest-> AuthError.WrongPassword
-            HttpStatusCode.NotFound -> AuthError.UserNotFound
-            else-> AppErrors.UnhandledError(result.status.toString())
+        when(result.status){
+            HttpStatusCode.OK-> result.body<UserTokenInfoBody>()
+            HttpStatusCode.BadRequest-> throw AuthError.WrongPassword
+            HttpStatusCode.NotFound -> throw AuthError.UserNotFound
+            else-> throw AppErrors.UnhandledError(result.status.toString())
         }
-        return Result.failure(error)
     }
 
-    override suspend fun updateUserInfo(token: String): Result<UserTokenInfoModel> {
+    override suspend fun updateUserInfo(token: String): Result<UserTokenInfoModel> = runCatching{
         val result = authApi.updateToken(TokenBody(token))
-        val error = when(result.status){
-            HttpStatusCode.OK->
-                return Result.success(result.body<UserTokenInfoBody>())
-            HttpStatusCode.NotFound -> AuthError.BadToken
-            else-> AppErrors.UnhandledError(result.status.toString())
+        when(result.status){
+            HttpStatusCode.OK-> result.body<UserTokenInfoBody>()
+            HttpStatusCode.NotFound -> throw AuthError.BadToken
+            else-> throw AppErrors.UnhandledError(result.status.toString())
         }
-        return Result.failure(error)
     }
 
 }

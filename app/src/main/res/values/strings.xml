@@ -16,4 +16,7 @@
     <string name="appraiser">Оценщик</string>
     <string name="teacher">Учитель</string>
     <string name="user_role">Роль пользователя</string>
+    <string name="add">Добавить</string>
+    <string name="fio">ФИО</string>
+    <string name="adding_new_teacher">Добавление нового учителя</string>
 </resources>

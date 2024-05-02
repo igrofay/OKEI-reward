@@ -10,14 +10,20 @@ import io.ktor.http.HttpStatusCode
 
 internal class TeachersReposImpl(
     private val teacherApi: TeacherApi,
-) : TeachersRepos{
-    override suspend fun getAllTeacher(): Result<List<TeacherModel>> {
+) : TeachersRepos {
+    override suspend fun getAllTeacher(): Result<List<TeacherModel>> = runCatching {
         val answer = teacherApi.getTeachers()
-        return when(answer.status){
-            HttpStatusCode.OK -> Result.success(
-                answer.body<List<TeacherBody>>()
-            )
-            else -> Result.failure(AppErrors.UnhandledError(answer.status.toString()))
+        when (answer.status) {
+            HttpStatusCode.OK -> answer.body<List<TeacherBody>>()
+            else -> throw AppErrors.UnhandledError(answer.status.toString())
+        }
+    }
+
+    override suspend fun deleteUser(id: String): Result<Boolean> = runCatching{
+        val answer = teacherApi.deleteTeacher(id)
+        when (answer.status) {
+            HttpStatusCode.NoContent -> true
+            else -> throw AppErrors.UnhandledError(answer.status.toString())
         }
     }
 }

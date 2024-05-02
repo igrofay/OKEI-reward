@@ -74,6 +74,7 @@ private fun httpClient(urlServer: String) = HttpClient(Android) {
             prettyPrint = true
             isLenient = true
             ignoreUnknownKeys = true
+            allowSpecialFloatingPointValues = true
         })
     }
     install(HttpRequestRetry) {

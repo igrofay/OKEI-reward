@@ -8,5 +8,7 @@ sealed class TeachersState : UIState() {
     data class TeacherManagement(
         val listTeacher: List<TeacherModel>,
         val searchText: String = "",
+        val addOrEditClarification: AddOrEditClarification = AddOrEditClarification.Nothing,
     ) : TeachersState()
+
 }

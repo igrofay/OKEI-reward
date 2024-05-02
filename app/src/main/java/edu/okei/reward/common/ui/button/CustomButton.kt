@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import edu.okei.reward.common.ui.click.alphaClick
+import edu.okei.reward.common.ui.theme.Black900
 import edu.okei.reward.common.ui.theme.Gray200
 import edu.okei.reward.common.ui.theme.dimensions
 
@@ -20,8 +21,10 @@ import edu.okei.reward.common.ui.theme.dimensions
 fun CustomButton(
     text: String,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.button,
-    background: Color = Gray200,
+    textColor: Color = Black900,
+    textStyle: TextStyle = MaterialTheme.typography.button
+        .copy(color = MaterialTheme.colors.background),
+    background: Color = MaterialTheme.colors.primary,
     contentPadding: PaddingValues = PaddingValues(MaterialTheme.dimensions.grid_5_5),
     onClick: ()->Unit,
 ) {
