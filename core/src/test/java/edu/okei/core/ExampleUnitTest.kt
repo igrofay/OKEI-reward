@@ -3,6 +3,7 @@ package edu.okei.core
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.util.Locale
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -11,7 +12,15 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun name_isCorrect() {
+        val input =  correctName("  пушилин георгий   ")
+        assertEquals("Пушилин Георгий", input)
     }
+    fun correctName(text: String) = text.trim()
+        .split(" ")
+        .joinToString(" ") { str ->
+            str.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            }
+        }
 }

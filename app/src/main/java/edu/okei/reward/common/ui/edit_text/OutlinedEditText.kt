@@ -37,7 +37,7 @@ private fun PreviewEditText() {
                 .background(Blue),
             contentAlignment = Alignment.Center
         ) {
-            EditText(
+            OutlinedEditText(
                 value = "",
                 onValueChange = {},
                 hint = "Login"
@@ -47,7 +47,7 @@ private fun PreviewEditText() {
 }
 
 @Composable
-fun EditText(
+fun OutlinedEditText(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -60,7 +60,9 @@ fun EditText(
         color = MaterialTheme.colors.primary,
         textAlign = TextAlign.Center
     ),
-    borderColor: Color = MaterialTheme.colors.primary
+    borderColor: Color = MaterialTheme.colors.primary,
+    contentAlignment: Alignment = Alignment.Center,
+    singleLine: Boolean = true,
 ) {
     BasicTextField(
         value = value,
@@ -68,10 +70,9 @@ fun EditText(
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
-        singleLine = true,
+        singleLine = singleLine,
         cursorBrush = SolidColor(Gray200),
         textStyle = textStyle,
-
     ) { innerTextField ->
         Box(
             modifier = modifier
@@ -82,7 +83,7 @@ fun EditText(
                     MaterialTheme.shapes.medium
                 )
                 .padding(paddingValues),
-            contentAlignment = Alignment.Center,
+            contentAlignment = contentAlignment,
         ) {
             innerTextField()
             if (hint != null && value.isBlank())

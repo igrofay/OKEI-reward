@@ -19,4 +19,8 @@
     <string name="add">Добавить</string>
     <string name="fio">ФИО</string>
     <string name="adding_new_teacher">Добавление нового учителя</string>
+    <string name="invalid_name_format">Неверный формат фио</string>
+    <string name="criteria">Критерии</string>
+    <string name="adding_criterion">Добавление критерия</string>
+    <string name="name_criterion">Названание критерия</string>
 </resources>

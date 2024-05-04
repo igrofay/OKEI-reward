@@ -9,6 +9,5 @@ internal class TeacherApi(
 ){
     suspend fun getTeachers() = authClient
         .get("/api/teachers")
-    suspend fun deleteTeacher(id: String) = authClient
-        .delete("/api/user/$id")
+
 }

@@ -1,5 +1,6 @@
 package edu.okei.reward
 
+import edu.okei.reward.criteria.model.CriterionBuilder
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -9,9 +10,29 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class BuilderCriterionUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun serialNumber_isCorrect_BadInput() {
+        val builder = CriterionBuilder(listOf())
+        assertEquals(false, builder.isSerialNumber("."))
+        assertEquals(false, builder.isSerialNumber(".1"))
+        assertEquals(false, builder.isSerialNumber(".1.2"))
+        assertEquals(false, builder.isSerialNumber("1.."))
+        assertEquals(false, builder.isSerialNumber("1.2.."))
+    }
+
+    @Test
+    fun serialNumber_isCorrect_GoodInput(){
+        val builder = CriterionBuilder(listOf())
+        assertEquals(true, builder.isSerialNumber("1"))
+        assertEquals(true, builder.isSerialNumber("2."))
+        assertEquals(true, builder.isSerialNumber("2.1"))
+        assertEquals(true, builder.isSerialNumber("2.1."))
+        assertEquals(true, builder.isSerialNumber("2.3.4"))
+    }
+    @Test
+    fun serialNumber_isCorrect_TrimPoint(){
+        assertEquals("2", "2.".trim('.'))
+        assertEquals("1.3", "1.3.".trim('.'))
     }
 }

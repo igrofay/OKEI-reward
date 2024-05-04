@@ -1,6 +1,5 @@
 package edu.okei.reward.teachers.view
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -23,17 +21,26 @@ import edu.okei.reward.common.ui.button.FloatingButton
 import edu.okei.reward.common.ui.load.LoadView
 import edu.okei.reward.common.view_model.rememberVM
 import edu.okei.reward.teachers.model.TeachersEvent
+import edu.okei.reward.teachers.model.TeachersSideEffect
 import edu.okei.reward.teachers.model.TeachersState
 import edu.okei.reward.teachers.view_model.TeachersVM
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun TeachersScreen() {
+fun TeachersScreen(
+    addNewTeacher: ()-> Unit,
+) {
     val teachersVM by rememberVM<TeachersVM>()
     val state by teachersVM.collectAsState()
     val listState = rememberLazyListState()
     val isVisibleFirstItem by remember {
         derivedStateOf { listState.firstVisibleItemIndex == 0 }
+    }
+    teachersVM.collectSideEffect { sideEffect ->
+        when(sideEffect){
+            TeachersSideEffect.OpenAddTeacher -> addNewTeacher()
+        }
     }
     Scaffold(
         topBar = {
@@ -51,10 +58,10 @@ fun TeachersScreen() {
                     teachersVM.onEvent(TeachersEvent.AddTeacher)
                 }
         }
-    ) {
+    ) {paddingValues->
         Box(
             modifier = Modifier
-                .padding(it)
+                .padding(paddingValues)
                 .fillMaxSize()
         ) {
             when (state) {

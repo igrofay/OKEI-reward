@@ -1,6 +1,7 @@
 package edu.okei.core.dependency_injection
 
 import edu.okei.core.domain.use_case.AuthUseCase
+import edu.okei.core.domain.use_case.CriteriaIterator
 import edu.okei.core.domain.use_case.RestartSessionUseCase
 import edu.okei.core.domain.use_case.TeachersIterator
 import org.kodein.di.DI
@@ -17,5 +18,8 @@ internal val UseCaseModule by DI.Module{
     }
     bindProvider {
         new(::TeachersIterator)
+    }
+    bindProvider {
+        new(::CriteriaIterator)
     }
 }

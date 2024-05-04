@@ -1,6 +1,8 @@
 package edu.okei.core.dependency_injection
 import android.util.Log
+import edu.okei.core.data.data_source.network.AdminApi
 import edu.okei.core.data.data_source.network.AuthApi
+import edu.okei.core.data.data_source.network.CriteriaApi
 import edu.okei.core.data.data_source.network.StatsApi
 import edu.okei.core.data.data_source.network.TeacherApi
 import edu.okei.core.domain.repos.UserRepos
@@ -65,6 +67,12 @@ internal val NetworkModule by DI.Module {
     }
     bindProvider {
         TeacherApi(instance<HttpClient>(AUTHORIZED_CLIENT))
+    }
+    bindProvider {
+        AdminApi(instance<HttpClient>(AUTHORIZED_CLIENT))
+    }
+    bindProvider {
+        CriteriaApi(instance<HttpClient>(AUTHORIZED_CLIENT))
     }
 }
 

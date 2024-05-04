@@ -7,6 +7,6 @@ sealed class TeachersEvent : UIEvent() {
     data class InputSearch(val search: String) : TeachersEvent()
     // Teacher Managent
     data object AddTeacher : TeachersEvent()
-    data object CancelAddOrEdit : TeachersEvent()
     data class DeleteUser(val login: String) : TeachersEvent()
+    data object UpdateListTeacher : TeachersEvent()
 }

@@ -30,7 +30,7 @@ import edu.okei.reward.R
 import edu.okei.reward.auth.model.AuthEvent
 import edu.okei.reward.auth.model.AuthState
 import edu.okei.reward.common.ui.button.CustomButton
-import edu.okei.reward.common.ui.edit_text.EditText
+import edu.okei.reward.common.ui.edit_text.OutlinedEditText
 import edu.okei.reward.common.ui.theme.AppTheme
 import edu.okei.reward.common.ui.theme.Gray200
 import edu.okei.reward.common.ui.theme.backgroundStartScreen
@@ -96,7 +96,7 @@ fun AuthContent(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            EditText(
+            OutlinedEditText(
                 value = state.login,
                 onValueChange = {
                     event.onEvent(AuthEvent.InputLogin(it))
@@ -120,7 +120,7 @@ fun AuthContent(
                     MaterialTheme.dimensions.grid_3 * 1.5f
                 )
             )
-            EditText(
+            OutlinedEditText(
                 value = state.password,
                 onValueChange = {
                     event.onEvent(AuthEvent.InputPassword(it))
