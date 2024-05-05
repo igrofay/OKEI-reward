@@ -32,7 +32,7 @@ class TeachersVM(
     private val teachersIterator by di.instance<TeachersIterator>()
     private val monthIndex = savedStateHandle.get<String>("montIndex") as Int?
     private val isEdit = monthIndex == null
-    private var searchUserJob: Job? = null
+    private var searchTeacherJob: Job? = null
     override val container: Container<TeachersState, TeachersSideEffect> = viewModelScope
         .container(TeachersState.Load) {
             TeachersEventTransmitter.subscribe(this@TeachersVM)
@@ -94,8 +94,8 @@ class TeachersVM(
         reduce {
             targetState.copy(searchText = text)
         }
-        searchUserJob?.cancel()
-        searchUserJob = searchTeachers(text)
+        searchTeacherJob?.cancel()
+        searchTeacherJob = searchTeachers(text)
     }
 
     private fun searchTeachers(text: String) = intent {

@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
@@ -19,12 +20,14 @@ import edu.okei.reward.common.model.TypeDevise
 
 private val DarkColorPalette = darkColors(
     primary = Gray200,
-    background = Black900
+    background = Black900,
+    surface = Color.Black
 )
 
 private val LightColorPalette = lightColors(
     primary = Blue,
     background = Gray200,
+    surface = Color.White
 )
 
 

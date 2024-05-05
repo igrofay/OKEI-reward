@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -45,6 +46,7 @@ private fun PreviewEditText() {
         }
     }
 }
+typealias TrailingIcon = @Composable ()-> Unit
 
 @Composable
 fun OutlinedEditText(
@@ -63,6 +65,7 @@ fun OutlinedEditText(
     borderColor: Color = MaterialTheme.colors.primary,
     contentAlignment: Alignment = Alignment.Center,
     singleLine: Boolean = true,
+    trailingIcon: TrailingIcon? = null
 ) {
     BasicTextField(
         value = value,
@@ -71,10 +74,11 @@ fun OutlinedEditText(
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
         singleLine = singleLine,
-        cursorBrush = SolidColor(Gray200),
+        cursorBrush = SolidColor(borderColor),
         textStyle = textStyle,
     ) { innerTextField ->
-        Box(
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
                 .border(
@@ -82,17 +86,23 @@ fun OutlinedEditText(
                     borderColor,
                     MaterialTheme.shapes.medium
                 )
-                .padding(paddingValues),
-            contentAlignment = contentAlignment,
-        ) {
-            innerTextField()
-            if (hint != null && value.isBlank())
-                Text(
-                    text = hint,
-                    style = textStyle.copy(
-                        color = textStyle.color.copy(0.6f)
-                    ),
-                )
+                .padding(paddingValues)
+        ){
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = contentAlignment,
+            ) {
+                innerTextField()
+                if (hint != null && value.isBlank())
+                    Text(
+                        text = hint,
+                        style = textStyle.copy(
+                            color = textStyle.color.copy(0.6f)
+                        ),
+                    )
+            }
+            trailingIcon?.invoke()
         }
+
     }
 }

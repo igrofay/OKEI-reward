@@ -77,7 +77,7 @@ fun NavGraphBuilder.appraiseContentGraph(
         ) {
             AddOrEditCriteriaScreen(
                 onDismissRequest = {
-
+                    navController.popBackStack()
                 }
             )
         }

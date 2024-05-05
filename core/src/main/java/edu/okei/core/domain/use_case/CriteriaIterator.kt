@@ -1,6 +1,8 @@
 package edu.okei.core.domain.use_case
 
+import android.adservices.adid.AdId
 import edu.okei.core.domain.model.criteria.CriterionModel
+import edu.okei.core.domain.model.criteria.NewCriterionModel
 import edu.okei.core.domain.repos.CriteriaRepos
 
 class CriteriaIterator(
@@ -16,5 +18,10 @@ class CriteriaIterator(
             else list
             listSearch.sortedBy { it.serialNumber }
         }
-
+    suspend fun createCriterion(model: NewCriterionModel): Result<Boolean> =
+        criteriaRepos.createCriterion(model)
+    suspend fun deleteCriterion(criterionId: String, searchText: String) : Result<List<CriterionModel>> =
+        criteriaRepos.deleteCriterion(criterionId).mapCatching {
+            getCriteria(searchText).getOrThrow()
+        }
 }

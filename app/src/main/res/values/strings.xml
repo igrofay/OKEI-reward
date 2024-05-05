@@ -22,5 +22,12 @@
     <string name="invalid_name_format">Неверный формат фио</string>
     <string name="criteria">Критерии</string>
     <string name="adding_criterion">Добавление критерия</string>
-    <string name="name_criterion">Названание критерия</string>
+    <string name="name_of_indicators">Наименование показателей</string>
+    <string name="name_of_criteria">Наименование критериев</string>
+    <string name="serial_number">Серийный номер, например, 2.1</string>
+    <string name="evaluation_options">Варианты оценки</string>
+    <string name="number_of_points">Количество баллов</string>
+    <string name="create">Создать</string>
+    <string name="indicator_value">Значение показателя</string>
+    <string name="fill_in_blanks">Заполните все поля</string>
 </resources>
