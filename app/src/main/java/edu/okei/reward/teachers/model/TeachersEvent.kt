@@ -9,4 +9,8 @@ sealed class TeachersEvent : UIEvent() {
     data object AddTeacher : TeachersEvent()
     data class DeleteUser(val login: String) : TeachersEvent()
     data object UpdateListTeacher : TeachersEvent()
+    // Teacher Managent
+    // TeacherRating
+    data class SeeTeacherCriteria(val teacherId: String) : TeachersEvent()
+    // TeacherRating
 }

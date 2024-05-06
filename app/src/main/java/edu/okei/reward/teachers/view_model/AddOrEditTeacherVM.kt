@@ -2,8 +2,9 @@ package edu.okei.reward.teachers.view_model
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import edu.okei.core.domain.model.errors.AddOrEditError
 import edu.okei.core.domain.model.errors.UserManagementErrors
-import edu.okei.core.domain.use_case.TeachersIterator
+import edu.okei.core.domain.use_case.teacher.AddTeacherUseCase
 import edu.okei.reward.R
 import edu.okei.reward.common.view_model.AppVM
 import edu.okei.reward.teachers.model.AddOrEditTeacherEvent
@@ -26,7 +27,7 @@ class AddOrEditTeacherVM(
 ) : AppVM<AddOrEditTeacherState, AddOrEditTeacherSideEffect, AddOrEditTeacherEvent>(),
     DIAware
 {
-    private val teachersIterator by di.instance<TeachersIterator>()
+    private val addTeacherUseCase by di.instance<AddTeacherUseCase>()
 
     override val container: Container<AddOrEditTeacherState, AddOrEditTeacherSideEffect> =
         viewModelScope.container(AddOrEditTeacherState())
@@ -41,8 +42,7 @@ class AddOrEditTeacherVM(
         }
     }
     private fun addTeacher() = intent {
-        if (state.fio.isBlank()) return@intent
-        teachersIterator.add(state.fio)
+        addTeacherUseCase.execute(state.fio)
             .onFailure(::onError)
             .onSuccess {
                 TeachersEventTransmitter.sendMessage(TeachersEvent.UpdateListTeacher)
@@ -54,6 +54,9 @@ class AddOrEditTeacherVM(
         when(er){
             UserManagementErrors.InvalidNameFormat -> intent {
                 postSideEffect(AddOrEditTeacherSideEffect.ShowMessage(R.string.invalid_name_format))
+            }
+            AddOrEditError.DataFilledInIncorrectly -> intent {
+                postSideEffect(AddOrEditTeacherSideEffect.ShowMessage(R.string.fill_in_blanks))
             }
             else -> Log.e(nameVM, er.message, er)
         }

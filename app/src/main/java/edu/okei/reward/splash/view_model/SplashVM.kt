@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import edu.okei.core.domain.model.errors.AuthError
 import edu.okei.core.domain.model.user.UserRole
-import edu.okei.core.domain.use_case.RestartSessionUseCase
+import edu.okei.core.domain.use_case.auth.RestartSessionUseCase
 import edu.okei.reward.common.model.UIEvent
 import edu.okei.reward.common.model.UIState
 import edu.okei.reward.common.view_model.AppVM

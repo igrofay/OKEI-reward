@@ -4,11 +4,13 @@ import android.content.SharedPreferences
 import edu.okei.core.data.data_source.network.AuthApi
 import edu.okei.core.data.data_source.network.StatsApi
 import edu.okei.core.data.repos.AuthReposImpl
+import edu.okei.core.data.repos.ConductingAnEvaluationReposImpl
 import edu.okei.core.data.repos.CriteriaReposImpl
 import edu.okei.core.data.repos.StatisticReposImpl
 import edu.okei.core.data.repos.UsersManagementReposImpl
 import edu.okei.core.data.repos.UserReposImpl
 import edu.okei.core.domain.repos.AuthRepos
+import edu.okei.core.domain.repos.ConductingAnEvaluationRepos
 import edu.okei.core.domain.repos.CriteriaRepos
 import edu.okei.core.domain.repos.StatisticRepos
 import edu.okei.core.domain.repos.UserRepos
@@ -33,5 +35,8 @@ internal val ReposModule by DI.Module{
     }
     bindProvider<CriteriaRepos> {
         new(::CriteriaReposImpl)
+    }
+    bindProvider<ConductingAnEvaluationRepos> {
+        new(::ConductingAnEvaluationReposImpl)
     }
 }

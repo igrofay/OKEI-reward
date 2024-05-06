@@ -30,6 +30,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun TeachersScreen(
     addNewTeacher: ()-> Unit,
+    openTeacherCriteria: (monthIndex: Int, teacherId: String)-> Unit,
 ) {
     val teachersVM by rememberVM<TeachersVM>()
     val state by teachersVM.collectAsState()
@@ -40,6 +41,8 @@ fun TeachersScreen(
     teachersVM.collectSideEffect { sideEffect ->
         when(sideEffect){
             TeachersSideEffect.OpenAddTeacher -> addNewTeacher()
+            is TeachersSideEffect.OpenTeacherCriteria ->
+                openTeacherCriteria(sideEffect.monthIndex, sideEffect.teacherId)
         }
     }
     Scaffold(
@@ -72,6 +75,11 @@ fun TeachersScreen(
                         teachersVM,
                         listState
                     )
+                is TeachersState.TeacherRating -> TeacherRatingContent(
+                    state as TeachersState.TeacherRating,
+                    teachersVM,
+                    listState
+                )
             }
         }
     }

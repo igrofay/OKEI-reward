@@ -1,17 +1,16 @@
-package edu.okei.core.domain.use_case
+package edu.okei.core.domain.use_case.auth
 
+import edu.okei.core.domain.model.auth.AuthModel
 import edu.okei.core.domain.model.user.UserRole
 import edu.okei.core.domain.repos.AuthRepos
 import edu.okei.core.domain.repos.UserRepos
 
-class RestartSessionUseCase(
+class AuthUseCase(
     private val userRepos: UserRepos,
     private val authRepos: AuthRepos,
 ) {
-    suspend fun execute() : Result<UserRole>{
-        val token = userRepos.getRefreshToken()
-            ?: return Result.success(UserRole.Undefined)
-        val result = authRepos.updateUserInfo(token)
+    suspend fun execute(authModel: AuthModel) : Result<UserRole>{
+        val result = authRepos.authorization(authModel)
         return result.map { userTokenInfo->
             userRepos.updateUserTokenInfo(userTokenInfo)
             userTokenInfo.role

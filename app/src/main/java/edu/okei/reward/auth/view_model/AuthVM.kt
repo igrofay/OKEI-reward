@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import edu.okei.core.domain.model.errors.AuthError
 import edu.okei.core.domain.model.user.UserRole
-import edu.okei.core.domain.use_case.AuthUseCase
+import edu.okei.core.domain.use_case.auth.AuthUseCase
 import edu.okei.reward.R
 import edu.okei.reward.auth.model.AuthEvent
 import edu.okei.reward.auth.model.AuthSideEffect

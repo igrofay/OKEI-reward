@@ -1,7 +1,9 @@
 package edu.okei.reward.nav.view
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
@@ -30,13 +32,20 @@ fun NavGraphBuilder.appraiseContentGraph(
                 openTeachers = {
                     navController
                         .navigate(AppraiserContentRouting.Teachers.getRoute())
+                },
+                openTeachersInMonth = {monthIndex->
+                    navController
+                        .navigate(AppraiserContentRouting.Teachers.getRoute(monthIndex))
                 }
             )
         }
         composable(
             AppraiserContentRouting.Teachers.route,
             arguments = listOf(
-                navArgument("monthIndex") { nullable = true }
+                navArgument("monthIndex") {
+                    nullable = true
+
+                }
             )
         ) {
             TeachersScreen(
@@ -45,6 +54,10 @@ fun NavGraphBuilder.appraiseContentGraph(
                         AppraiserContentRouting.AddOrEditTeacher.route
                     )
                 },
+                openTeacherCriteria = { monthIndex, teacherId ->
+                    navController
+                        .navigate(AppraiserContentRouting.Criteria.getRoute(monthIndex, teacherId))
+                }
             )
         }
         dialog(AppraiserContentRouting.AddOrEditTeacher.route) {

@@ -66,6 +66,11 @@ fun CriteriaScreen(
                     state as CriteriaState.CriteriaManagement,
                     criteriaVM, listState
                 )
+                is CriteriaState.TeacherEvaluationAccordingToCriteria -> EvalCriteriaForTeacherContent(
+                    state as CriteriaState.TeacherEvaluationAccordingToCriteria,
+                    criteriaVM,
+                    listState
+                )
             }
         }
     }

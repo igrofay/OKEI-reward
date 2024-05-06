@@ -9,5 +9,8 @@ internal class TeacherApi(
 ){
     suspend fun getTeachers() = authClient
         .get("/api/teachers")
-
+    suspend fun getListTeacherRating(monthIndex: Int) = authClient
+        .get("/api/rating/teachers?monthIndex=${monthIndex}")
+    suspend fun getTeacherMonthEvaluations(teacherId: String, monthIndex: Int) = authClient
+        .get("/api/marks/${teacherId}?monthIndex=${monthIndex}")
 }

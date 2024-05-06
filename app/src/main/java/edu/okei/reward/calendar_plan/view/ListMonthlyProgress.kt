@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -42,13 +44,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import edu.okei.core.domain.model.statistics.MonthlyProgressModel
 import edu.okei.reward.R
+import edu.okei.reward.calendar_plan.model.CalendarPlanEvent
 import edu.okei.reward.calendar_plan.model.CalendarPlanState
+import edu.okei.reward.common.ui.click.alphaClick
 import edu.okei.reward.common.ui.load.CircularProgressBar
 import edu.okei.reward.common.ui.theme.dimensions
+import edu.okei.reward.common.view_model.EventBase
 
 @Composable
 fun ListMonthlyProgress(
-    state: CalendarPlanState.MonthProgress
+    state: CalendarPlanState.MonthProgress,
+    eventBase: EventBase<CalendarPlanEvent>
 ) {
     LazyColumn(
         modifier = Modifier
@@ -63,23 +69,38 @@ fun ListMonthlyProgress(
         )
     ) {
         item {
-            MonthReportItem(state.model.currentMonth)
+            MonthReportItem(state.model.currentMonth){
+                eventBase.onEvent(
+                    CalendarPlanEvent.SeeTeachersInMonth(
+                        state.model.currentMonth.monthIndex
+                    )
+                )
+            }
         }
         item {
-            MonthReportItem(state.model.previousMonth)
+            MonthReportItem(state.model.previousMonth){
+                eventBase.onEvent(
+                    CalendarPlanEvent.SeeTeachersInMonth(
+                        state.model.previousMonth.monthIndex
+                    )
+                )
+            }
         }
     }
 }
 
+
 @Composable
 fun MonthReportItem(
-    monthReport: MonthlyProgressModel.MonthReportModel
+    monthReport: MonthlyProgressModel.MonthReportModel,
+    onClick: ()->Unit
 ) {
     var isVisibleTopTeacherAndProgress by remember {
         mutableStateOf(false)
     }
     Column(
         modifier = Modifier
+            .alphaClick { onClick() }
             .fillMaxWidth()
             .border(
                 MaterialTheme.dimensions.borderSmall,

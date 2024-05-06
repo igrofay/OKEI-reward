@@ -3,14 +3,16 @@ package edu.okei.reward.criteria.view_model
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import edu.okei.core.domain.use_case.CriteriaIterator
+import edu.okei.core.domain.use_case.criterion.DeleteCriterionUseCase
+import edu.okei.core.domain.use_case.criterion.GetCriteriaForEvaluatingTeacher
+import edu.okei.core.domain.use_case.criterion.GetCriteriaUseCase
+import edu.okei.core.domain.use_case.teacher.GetTeacherMonthEvaluations
 import edu.okei.reward.common.model.UIEvent
 import edu.okei.reward.common.view_model.AppVM
 import edu.okei.reward.criteria.model.CriteriaEvent
 import edu.okei.reward.criteria.model.CriteriaEventTransmitter
 import edu.okei.reward.criteria.model.CriteriaSideEffect
 import edu.okei.reward.criteria.model.CriteriaState
-import edu.okei.reward.teachers.model.TeachersState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import org.kodein.di.DI
@@ -29,14 +31,14 @@ class CriteriaVM(
 ) :
     AppVM<CriteriaState, CriteriaSideEffect, CriteriaEvent>(),
     DIAware,
-    CriteriaEventTransmitter.Observer
-{
+    CriteriaEventTransmitter.Observer {
     private var searchCriteriaJob: Job? = null
-    private val monthIndex = savedStateHandle.get<Int>("montIndex")
+    private val monthIndex = savedStateHandle.get<String>("monthIndex")?.toInt()
     private val teacherId = savedStateHandle.get<String>("teacherId")
-    private val isEdit = monthIndex == null && teacherId == null
-
-    private val criteriaIterator by di.instance<CriteriaIterator>()
+    private val isEdit = monthIndex == null || teacherId == null
+    private val deleteCriterionUseCase by di.instance<DeleteCriterionUseCase>()
+    private val getCriteriaUseCase by di.instance<GetCriteriaUseCase>()
+    private val getCriteriaForEvaluatingTeacher by di.instance<GetCriteriaForEvaluatingTeacher>()
     override val container: Container<CriteriaState, CriteriaSideEffect> = viewModelScope
         .container(CriteriaState.Load) {
             CriteriaEventTransmitter.subscribe(this@CriteriaVM)
@@ -45,11 +47,25 @@ class CriteriaVM(
 
     private fun loadCriteria() = intent {
         if (isEdit)
-            criteriaIterator.getCriteria()
+            getCriteriaUseCase.execute()
                 .onFailure(::onError)
                 .onSuccess { list ->
                     reduce { CriteriaState.CriteriaManagement(list) }
                 }
+        else {
+            getCriteriaForEvaluatingTeacher
+                .execute(teacherId!!, monthIndex!!)
+                .onFailure(::onError)
+                .onSuccess { data ->
+                    reduce {
+                        CriteriaState.TeacherEvaluationAccordingToCriteria(
+                            listCriterion = data.listCriterion,
+                            alreadyPostedTeacherEvaluations = data.alreadyPostedTeacherEvaluations,
+                            teacherName = data.teacherName
+                        )
+                    }
+                }
+        }
     }
 
     override fun onEvent(event: CriteriaEvent) {
@@ -57,6 +73,7 @@ class CriteriaVM(
             CriteriaEvent.AddCriterion -> blockingIntent {
                 postSideEffect(CriteriaSideEffect.OpenAddCriterion)
             }
+
             is CriteriaEvent.InputSearch -> inputSearchText(event.search)
             CriteriaEvent.UpdateListCriterion -> updateListCriterion()
             is CriteriaEvent.DeleteCriterion -> deleteCriterion(event.criterionId)
@@ -76,11 +93,12 @@ class CriteriaVM(
         CriteriaEventTransmitter.unsubscribe(this)
         super.onCleared()
     }
+
     private fun updateListCriterion() = intent {
         val targetState = state as? CriteriaState.CriteriaManagement ?: return@intent
-        criteriaIterator.getCriteria(targetState.searchText)
+        getCriteriaUseCase.execute(targetState.searchText)
             .onFailure(::onError)
-            .onSuccess { list->
+            .onSuccess { list ->
                 reduce {
                     targetState.copy(
                         listCriterion = list
@@ -88,6 +106,7 @@ class CriteriaVM(
                 }
             }
     }
+
     // Search
     private fun inputSearchText(text: String) = blockingIntent {
         val targetState = state as? CriteriaState.CriteriaManagement ?: return@blockingIntent
@@ -97,9 +116,10 @@ class CriteriaVM(
         searchCriteriaJob?.cancel()
         searchCriteriaJob = searchCriterion(text)
     }
+
     private fun searchCriterion(text: String) = intent {
         delay(500)
-        val result = criteriaIterator.getCriteria(text)
+        val result = getCriteriaUseCase.execute(text)
         if (result.isFailure) return@intent onError(result.exceptionOrNull()!!)
         reduce {
             (state as? CriteriaState.CriteriaManagement)?.copy(
@@ -107,15 +127,16 @@ class CriteriaVM(
             ) ?: state
         }
     }
+
     // Search
-    private fun deleteCriterion(criterionId:String) = intent {
+    private fun deleteCriterion(criterionId: String) = intent {
         val searchText = (state as? CriteriaState.CriteriaManagement)?.searchText
             ?: return@intent
-        criteriaIterator.deleteCriterion(criterionId, searchText)
+        deleteCriterionUseCase.execute(criterionId, searchText)
             .onFailure(::onError)
-            .onSuccess {list->
+            .onSuccess { list ->
                 reduce {
-                    (state as?  CriteriaState.CriteriaManagement)?.copy(
+                    (state as? CriteriaState.CriteriaManagement)?.copy(
                         listCriterion = list
                     ) ?: state
                 }

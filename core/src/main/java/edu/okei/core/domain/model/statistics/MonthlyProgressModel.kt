@@ -6,6 +6,7 @@ interface MonthlyProgressModel {
     interface MonthReportModel{
         val name: String
         val underWay: Boolean
+        val monthIndex: Int
         val lastChange: String?
         val progress: Float
         val ratingTeachers: List<String>

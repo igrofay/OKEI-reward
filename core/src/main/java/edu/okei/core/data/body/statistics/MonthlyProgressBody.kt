@@ -1,6 +1,7 @@
 package edu.okei.core.data.body.statistics
 
 import edu.okei.core.domain.model.statistics.MonthlyProgressModel
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,6 +15,8 @@ internal data class MonthlyProgressBody(
         override val underWay: Boolean,
         override val lastChange: String?,
         override val progress: Float,
-        override val ratingTeachers: List<String>
+        override val ratingTeachers: List<String>,
+        @SerialName("month")
+        override val monthIndex: Int
     ) : MonthlyProgressModel.MonthReportModel
 }

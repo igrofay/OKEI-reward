@@ -52,6 +52,9 @@ class CalendarPlanVM(
             CalendarPlanEvent.SeeTeacher -> blockingIntent {
                 postSideEffect(CalendarPlanSideEffect.OpenTeachers)
             }
+            is CalendarPlanEvent.SeeTeachersInMonth -> blockingIntent {
+                postSideEffect(CalendarPlanSideEffect.OpenTeachersInMonth(event.mothIndex))
+            }
         }
     }
 }

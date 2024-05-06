@@ -2,8 +2,9 @@ package edu.okei.reward.criteria.view_model
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import edu.okei.core.domain.model.criteria.CriterionModel
-import edu.okei.core.domain.use_case.CriteriaIterator
+import edu.okei.core.domain.model.errors.AddOrEditError
+import edu.okei.core.domain.use_case.criterion.CreateCriterionUseCase
+import edu.okei.core.domain.use_case.criterion.GetCriteriaUseCase
 import edu.okei.reward.R
 import edu.okei.reward.common.view_model.AppVM
 import edu.okei.reward.criteria.model.AddOrEditCriteriaEvent
@@ -27,7 +28,8 @@ class AddOrEditCriteriaVM(
     override val di: DI
 ) : AppVM<AddOrEditCriteriaState, AddOrEditCriteriaSideEffect, AddOrEditCriteriaEvent>(),
     DIAware {
-    private val criteriaIterator by di.instance<CriteriaIterator>()
+    private val getCriteriaUseCase by di.instance<GetCriteriaUseCase>()
+    private val createCriterionUseCase by di.instance<CreateCriterionUseCase>()
     private lateinit var builder: CriterionBuilder
     override val container: Container<AddOrEditCriteriaState, AddOrEditCriteriaSideEffect> =
         viewModelScope.container(AddOrEditCriteriaState.Load) {
@@ -54,11 +56,16 @@ class AddOrEditCriteriaVM(
     }
 
     override fun onError(er: Throwable) {
-        Log.e(nameVM, er.message, er)
+        when(er){
+            AddOrEditError.DataFilledInIncorrectly-> intent {
+                postSideEffect(AddOrEditCriteriaSideEffect.ShowMessage(R.string.fill_in_blanks))
+            }
+            else-> Log.e(nameVM, er.message, er)
+        }
     }
 
     private fun loadListCriterion() = intent {
-        criteriaIterator.getCriteria()
+        getCriteriaUseCase.execute()
             .onFailure(::onError)
             .onSuccess { list ->
                 builder = CriterionBuilder(list)
@@ -201,17 +208,7 @@ class AddOrEditCriteriaVM(
         }
     }
     private fun addOrEditCriterion() = intent {
-        val addOrEditCriteria = state as AddOrEditCriteriaState.AddOrEditCriteria
-        if(addOrEditCriteria.nameCriterion.isBlank())
-            return@intent postSideEffect(AddOrEditCriteriaSideEffect.ShowMessage(R.string.fill_in_blanks))
-        if (addOrEditCriteria.description.isBlank())
-            return@intent postSideEffect(AddOrEditCriteriaSideEffect.ShowMessage(R.string.fill_in_blanks))
-        if (addOrEditCriteria.serialNumber.isBlank())
-            return@intent postSideEffect(AddOrEditCriteriaSideEffect.ShowMessage(R.string.fill_in_blanks))
-        for(item in addOrEditCriteria.evaluationOptions){
-            if (item.description.isBlank()) return@intent postSideEffect(AddOrEditCriteriaSideEffect.ShowMessage(R.string.fill_in_blanks))
-        }
-        criteriaIterator.createCriterion(builder.build())
+        createCriterionUseCase.execute(builder.build())
             .onFailure(::onError)
             .onSuccess {
                 CriteriaEventTransmitter.sendMessage(CriteriaEvent.UpdateListCriterion)

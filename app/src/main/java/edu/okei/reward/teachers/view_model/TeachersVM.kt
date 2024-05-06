@@ -3,7 +3,9 @@ package edu.okei.reward.teachers.view_model
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import edu.okei.core.domain.use_case.TeachersIterator
+import edu.okei.core.domain.use_case.teacher.DeleteTeacherUseCase
+import edu.okei.core.domain.use_case.teacher.GetListTeacherRatingUseCase
+import edu.okei.core.domain.use_case.teacher.GetTeachersUseCase
 import edu.okei.reward.common.model.UIEvent
 import edu.okei.reward.common.view_model.AppVM
 import edu.okei.reward.teachers.model.TeachersEvent
@@ -29,8 +31,10 @@ class TeachersVM(
     AppVM<TeachersState, TeachersSideEffect, TeachersEvent>(),
     DIAware,
     TeachersEventTransmitter.Observer {
-    private val teachersIterator by di.instance<TeachersIterator>()
-    private val monthIndex = savedStateHandle.get<String>("montIndex") as Int?
+    private val getTeachersUseCase by di.instance<GetTeachersUseCase>()
+    private val deleteTeacherUseCase by di.instance<DeleteTeacherUseCase>()
+    private val getListTeacherRatingUseCase by di.instance<GetListTeacherRatingUseCase>()
+    private val monthIndex = savedStateHandle.get<String>("monthIndex")?.toInt()
     private val isEdit = monthIndex == null
     private var searchTeacherJob: Job? = null
     override val container: Container<TeachersState, TeachersSideEffect> = viewModelScope
@@ -47,6 +51,14 @@ class TeachersVM(
                 postSideEffect(TeachersSideEffect.OpenAddTeacher)
             }
             TeachersEvent.UpdateListTeacher -> updateList()
+            is TeachersEvent.SeeTeacherCriteria -> blockingIntent {
+                if (!isEdit) postSideEffect(
+                    TeachersSideEffect.OpenTeacherCriteria(
+                        monthIndex!!,
+                        event.teacherId
+                    )
+                )
+            }
         }
     }
 
@@ -67,16 +79,22 @@ class TeachersVM(
     // Receiving data
     private fun loadTeachers() = intent {
         if (isEdit)
-            teachersIterator.getTeachers()
+            getTeachersUseCase.execute()
                 .onFailure(::onError)
                 .onSuccess { list ->
                     reduce { TeachersState.TeacherManagement(list) }
+                }
+        else
+            getListTeacherRatingUseCase.execute(monthIndex!!)
+                .onFailure(::onError)
+                .onSuccess { list ->
+                    reduce { TeachersState.TeacherRating(list) }
                 }
     }
 
     private fun updateList() = intent {
         val targetState = state as? TeachersState.TeacherManagement ?: return@intent
-        teachersIterator.getTeachers(targetState.searchText)
+        getTeachersUseCase.execute(targetState.searchText)
             .onFailure(::onError)
             .onSuccess { list ->
                 reduce {
@@ -90,9 +108,15 @@ class TeachersVM(
     // Receiving data
     // Search
     private fun inputSearchText(text: String) = blockingIntent {
-        val targetState = state as? TeachersState.TeacherManagement ?: return@blockingIntent
-        reduce {
-            targetState.copy(searchText = text)
+        (state as? TeachersState.TeacherManagement)?.also { targetState ->
+            reduce {
+                targetState.copy(searchText = text)
+            }
+        }
+        (state as? TeachersState.TeacherRating)?.also { targetState ->
+            reduce {
+                targetState.copy(searchText = text)
+            }
         }
         searchTeacherJob?.cancel()
         searchTeacherJob = searchTeachers(text)
@@ -100,21 +124,39 @@ class TeachersVM(
 
     private fun searchTeachers(text: String) = intent {
         delay(500)
-        val result = teachersIterator.getTeachers(text)
-        if (result.isFailure) return@intent onError(result.exceptionOrNull()!!)
-        reduce {
-            (state as? TeachersState.TeacherManagement)?.copy(
-                listTeacher = result.getOrNull()!!
-            ) ?: state
+        if (isEdit) {
+            val result =
+                getTeachersUseCase.execute(text)
+            if (result.isFailure) return@intent onError(result.exceptionOrNull()!!)
+            (state as TeachersState.TeacherManagement).also { targetState ->
+                reduce {
+                    targetState.copy(
+                        listTeacher = result.getOrThrow()
+                    )
+                }
+            }
+        } else {
+            val result =
+                getListTeacherRatingUseCase.execute(monthIndex!!, text)
+            if (result.isFailure) return@intent onError(result.exceptionOrNull()!!)
+            (state as TeachersState.TeacherRating).also { targetState ->
+                reduce {
+                    targetState.copy(
+                        listTeacher = result.getOrThrow()
+                    )
+                }
+            }
         }
-    }
-    // Search
 
+
+    }
+
+    // Search
     // Teacher Managent
     private fun deleteUser(id: String) = intent {
-        val searchText = (state as? TeachersState.TeacherManagement)
-            ?.searchText ?: return@intent
-        teachersIterator.delete(id, searchText)
+        val searchText = (state as? TeachersState.TeacherManagement)?.searchText
+            ?: return@intent
+        deleteTeacherUseCase.execute(id, searchText)
             .onFailure(::onError)
             .onSuccess { list ->
                 reduce {

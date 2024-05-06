@@ -32,6 +32,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun CalendarPlanScreen(
     openCriteria: ()->Unit,
     openTeachers: ()->Unit,
+    openTeachersInMonth: (monthIndex: Int)->Unit,
 ) {
     val calendarPlanVM by rememberVM<CalendarPlanVM>()
     calendarPlanVM.collectSideEffect{sideEffect->
@@ -40,6 +41,8 @@ fun CalendarPlanScreen(
                 .OpenCriteria -> openCriteria()
             CalendarPlanSideEffect
                 .OpenTeachers -> openTeachers()
+            is CalendarPlanSideEffect
+                .OpenTeachersInMonth -> openTeachersInMonth(sideEffect.monthIndex)
         }
     }
     Scaffold(
@@ -82,7 +85,10 @@ fun CalendarPlanScreen(
         ) { targetState->
             when(targetState){
                 CalendarPlanState.Load -> LoadView()
-                is CalendarPlanState.MonthProgress -> ListMonthlyProgress(targetState)
+                is CalendarPlanState.MonthProgress -> ListMonthlyProgress(
+                    targetState,
+                    calendarPlanVM
+                )
             }
         }
     }
