@@ -1,5 +1,6 @@
 package edu.okei.core.data.repos
 
+import edu.okei.core.data.body.teacher.CreateTeacherEvaluationBody
 import edu.okei.core.data.body.teacher.TeacherEvaluationBody
 import edu.okei.core.data.body.teacher.TeacherRatingBody
 import edu.okei.core.data.data_source.network.TeacherApi
@@ -23,12 +24,23 @@ internal class ConductingAnEvaluationReposImpl(
 
     override suspend fun getTeacherMonthEvaluations(
         teacherId: String,
-        monthIndex: Int
+        monthIndex: Int,
     ): Result<List<TeacherEvaluationModel>> = runCatching {
         val answer = teacherApi.getTeacherMonthEvaluations(teacherId, monthIndex)
         when(answer.status){
             HttpStatusCode.OK -> answer.body<List<TeacherEvaluationBody>>()
             else -> throw AppErrors.UnhandledError(answer.status.toString())
+        }
+    }
+
+    override suspend fun evalTeacher(
+        teacherId: String,
+        evaluationId: String
+    ): Result<TeacherEvaluationModel> = runCatching{
+        val answer = teacherApi.evaluateTeacher(CreateTeacherEvaluationBody(evaluationId, teacherId))
+        when(answer.status){
+            HttpStatusCode.OK -> answer.body<TeacherEvaluationBody>()
+            else-> throw AppErrors.UnhandledError(answer.status.toString())
         }
     }
 

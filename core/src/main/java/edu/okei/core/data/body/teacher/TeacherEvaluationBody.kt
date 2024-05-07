@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class TeacherEvaluationBody(
-    @SerialName("id")
     override val criterionId: String,
     override val appraiserName: String,
     override val date: String,

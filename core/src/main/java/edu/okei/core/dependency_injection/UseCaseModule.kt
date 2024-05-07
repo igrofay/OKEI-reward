@@ -9,6 +9,7 @@ import edu.okei.core.domain.use_case.criterion.GetCriteriaUseCase
 import edu.okei.core.domain.use_case.teacher.GetListTeacherRatingUseCase
 import edu.okei.core.domain.use_case.auth.RestartSessionUseCase
 import edu.okei.core.domain.use_case.criterion.GetCriteriaForEvaluatingTeacher
+import edu.okei.core.domain.use_case.teacher.CreateTeacherEvaluationUseCase
 import edu.okei.core.domain.use_case.teacher.GetTeacherMonthEvaluations
 import edu.okei.core.domain.use_case.teacher.GetTeachersUseCase
 import org.kodein.di.DI
@@ -27,4 +28,5 @@ internal val UseCaseModule by DI.Module {
     bindProvider { new(::DeleteTeacherUseCase) }
     bindProvider { new(::GetTeacherMonthEvaluations) }
     bindProvider { new(::GetCriteriaForEvaluatingTeacher) }
+    bindProvider { new(::CreateTeacherEvaluationUseCase) }
 }

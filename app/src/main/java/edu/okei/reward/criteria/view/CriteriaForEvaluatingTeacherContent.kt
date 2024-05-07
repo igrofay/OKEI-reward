@@ -23,17 +23,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import edu.okei.core.domain.model.criteria.CriterionModel
 import edu.okei.reward.R
 import edu.okei.reward.common.ui.click.alphaClick
@@ -44,8 +41,8 @@ import edu.okei.reward.criteria.model.CriteriaEvent
 import edu.okei.reward.criteria.model.CriteriaState
 
 @Composable
-fun CriteriaManagementContent(
-    state: CriteriaState.CriteriaManagement,
+fun CriteriaForEvaluatingTeacherContent(
+    state: CriteriaState.TeacherEvaluationAccordingToCriteria,
     eventBase: EventBase<CriteriaEvent>,
     listState: LazyListState,
 ) {
@@ -83,16 +80,13 @@ fun CriteriaManagementContent(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.grid_3_5),
             state = listState,
         ) {
-            itemsIndexed(state.listCriterion) { index, model->
+            itemsIndexed(state.listCriterion) { index, model ->
                 CriterionItem(
-                    model = model,
-                    onClickDelete = {
-                        eventBase.onEvent(CriteriaEvent.DeleteCriterion(model.id))
-                    },
-                    onClick = {
-                        eventBase.onEvent(CriteriaEvent.SeeFullCriteriaInformation(index))
-                    }
-                )
+                    model,
+                    state.alreadyPostedTeacherEvaluations.containsKey(model.id)
+                ){
+                    eventBase.onEvent(CriteriaEvent.SeeFullCriteriaInformation(index))
+                }
             }
         }
     }
@@ -101,8 +95,8 @@ fun CriteriaManagementContent(
 @Composable
 private fun CriterionItem(
     model: CriterionModel,
-    onClick: ()->Unit,
-    onClickDelete: ()->Unit,
+    isThereAnEstimate: Boolean,
+    onClick: ()->Unit
 ) {
     Row(
         modifier = Modifier
@@ -122,8 +116,14 @@ private fun CriterionItem(
                 .padding(MaterialTheme.dimensions.grid_5)
                 .border(
                     MaterialTheme.dimensions.borderSmall,
-                    MaterialTheme.colors.primary,
+                    if (isThereAnEstimate) Color.Transparent
+                    else MaterialTheme.colors.primary,
                     CircleShape
+                )
+                .background(
+                    if (isThereAnEstimate) MaterialTheme.colors.primary
+                    else Color.Transparent,
+                    CircleShape,
                 )
                 .padding(MaterialTheme.dimensions.grid_3_5),
             contentAlignment = Alignment.Center,
@@ -131,7 +131,10 @@ private fun CriterionItem(
             Text(
                 text = model.serialNumber,
                 style = MaterialTheme.typography.caption
-                    .copy(color = MaterialTheme.colors.primary)
+                    .copy(
+                        color = if (isThereAnEstimate) MaterialTheme.colors.background
+                        else MaterialTheme.colors.primary
+                    )
             )
         }
         Spacer(
@@ -149,16 +152,6 @@ private fun CriterionItem(
                     vertical = MaterialTheme.dimensions.grid_4
                 ),
             style = MaterialTheme.typography.body2
-        )
-        Icon(
-            painter = painterResource(R.drawable.ic_delete),
-            contentDescription = null,
-            tint = MaterialTheme.colors.primary,
-            modifier = Modifier
-                .padding(end = MaterialTheme.dimensions.grid_5_5)
-                .alphaClick { onClickDelete() }
-                .scale(MaterialTheme.dimensions.coefficient)
-                .size(28.dp)
         )
     }
 }

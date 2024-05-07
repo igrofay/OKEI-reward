@@ -46,7 +46,7 @@ dependencies {
     // Core
     implementation(kotlin("reflect"))
     implementation(project(":core"))
-    implementation("androidx.core:core-ktx:1.13.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     // Compose
     val composeBom = platform("androidx.compose:compose-bom:2024.04.01")
     implementation(composeBom)

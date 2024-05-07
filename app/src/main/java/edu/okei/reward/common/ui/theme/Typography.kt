@@ -21,6 +21,18 @@ private val gilroy = FontFamily(
 )
 val Typography = Typography(
     defaultFontFamily = gilroy,
+    subtitle1 = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
+    ),
+    subtitle2 = TextStyle(
+        fontWeight = FontWeight.W300,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.1.sp
+    ),
     // EditText
     body1 = TextStyle(
         fontWeight = FontWeight.W300,
