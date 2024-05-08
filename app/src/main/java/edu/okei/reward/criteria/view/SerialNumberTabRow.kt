@@ -38,10 +38,11 @@ fun SerialNumberTabRow(
     ScrollableTabRow(
         selectedTabIndex = pagerState.currentPage,
         indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                Modifier
-                    .tabIndicatorOffset(tabPositions[pagerState.currentPage])
-            )
+            if (tabPositions.isNotEmpty())
+                TabRowDefaults.Indicator(
+                    Modifier
+                        .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                )
         },
         backgroundColor = Color.Transparent,
         contentColor = MaterialTheme.colors.primary,

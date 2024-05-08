@@ -124,7 +124,7 @@ class CriteriaVM(
             .onSuccess { teacherEvaluationModel ->
                 (state as CriteriaState.TeacherEvaluationAccordingToCriteria).also {targetState->
                     val newMap = targetState.alreadyPostedTeacherEvaluations.toMutableMap()
-                    newMap[teacherEvaluationModel.evaluationId] = teacherEvaluationModel
+                    newMap[teacherEvaluationModel.criterionId] = teacherEvaluationModel
                     reduce {
                         targetState.copy(
                             alreadyPostedTeacherEvaluations = newMap

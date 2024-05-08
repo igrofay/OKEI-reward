@@ -145,7 +145,10 @@ fun MonthReportItem(
                 )
             }
             Spacer(modifier = Modifier.width(MaterialTheme.dimensions.grid_5))
-            Column {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ){
                 Text(
                     text = monthReport.name,
                     style = MaterialTheme.typography.h5.copy(
@@ -160,7 +163,7 @@ fun MonthReportItem(
                     )
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.grid_2))
             val rotateIcon by animateFloatAsState(
                 if (isVisibleTopTeacherAndProgress) 180f else 0f,
                 label = "animate rotate Icon"

@@ -1,6 +1,8 @@
 package edu.okei.reward.criteria.view
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import edu.okei.core.domain.model.criteria.CriterionModel
 import edu.okei.core.domain.model.teacher.TeacherEvaluationModel
@@ -146,6 +149,9 @@ private fun CriterionInformationPage(
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimensions.grid_5_5))
         criterion.evaluationOptions.forEachIndexed { index, evaluationOptionModel ->
+            val isSelected = remember(teacherEvaluation) {
+                teacherEvaluation?.evaluationId == evaluationOptionModel.id
+            }
             Row(
                 modifier = Modifier
                     .clip(CircleShape)
@@ -160,7 +166,11 @@ private fun CriterionInformationPage(
                         .clip(CircleShape)
                         .border(
                             MaterialTheme.dimensions.borderSmall,
-                            MaterialTheme.colors.primary,
+                            if (isSelected) Color.Transparent else MaterialTheme.colors.primary,
+                            CircleShape
+                        )
+                        .background(
+                            if (isSelected) MaterialTheme.colors.primary else Color.Transparent,
                             CircleShape
                         ),
                     contentAlignment = Alignment.Center
@@ -168,7 +178,7 @@ private fun CriterionInformationPage(
                     Text(
                         text = index.inc().toString(),
                         style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.primary
+                        color = if (isSelected) MaterialTheme.colors.background else MaterialTheme.colors.primary
                     )
                 }
                 Spacer(modifier = Modifier.width(MaterialTheme.dimensions.grid_5_5))
