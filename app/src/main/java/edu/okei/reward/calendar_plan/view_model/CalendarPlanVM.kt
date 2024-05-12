@@ -22,15 +22,15 @@ class CalendarPlanVM(
     override val di: DI
 ) :
     AppVM<CalendarPlanState, CalendarPlanSideEffect, CalendarPlanEvent>(),
-    DIAware
-{
+    DIAware {
     private val statisticRepos by di.instance<StatisticRepos>()
 
     override val container: Container<CalendarPlanState, CalendarPlanSideEffect> =
-        viewModelScope.container(CalendarPlanState.Load){
-            loadMonthProgress()
+        viewModelScope.container(CalendarPlanState.Load) {
+            loadMonthlyProgress()
         }
-    private fun loadMonthProgress() = intent {
+
+    private fun loadMonthlyProgress() = intent {
         statisticRepos.getMonthlyProgress().fold(
             onSuccess = { model: MonthlyProgressModel ->
                 reduce {
@@ -40,21 +40,43 @@ class CalendarPlanVM(
             onFailure = ::onError
         )
     }
+
     override fun onError(er: Throwable) {
         Log.e(nameVM, er.message, er)
     }
 
     override fun onEvent(event: CalendarPlanEvent) {
-        when(event){
+        when (event) {
             CalendarPlanEvent.SeeCriteria -> blockingIntent {
                 postSideEffect(CalendarPlanSideEffect.OpenCriteria)
             }
+
             CalendarPlanEvent.SeeTeacher -> blockingIntent {
                 postSideEffect(CalendarPlanSideEffect.OpenTeachers)
             }
+
             is CalendarPlanEvent.SeeTeachersInMonth -> blockingIntent {
                 postSideEffect(CalendarPlanSideEffect.OpenTeachersInMonth(event.mothIndex))
             }
+
+            CalendarPlanEvent.UpdateMonthlyProgress -> updateMonthlyProgress()
+            CalendarPlanEvent.SeeRewards -> blockingIntent {
+                postSideEffect(CalendarPlanSideEffect.OpenRewards)
+            }
+        }
+    }
+
+    private fun updateMonthlyProgress() = intent {
+        when (state) {
+            CalendarPlanState.Load -> return@intent
+            is CalendarPlanState.MonthProgress -> statisticRepos.getMonthlyProgress().fold(
+                onSuccess = { model: MonthlyProgressModel ->
+                    reduce {
+                        (state as CalendarPlanState.MonthProgress).copy(monthlyProgress = model)
+                    }
+                },
+                onFailure = ::onError
+            )
         }
     }
 }

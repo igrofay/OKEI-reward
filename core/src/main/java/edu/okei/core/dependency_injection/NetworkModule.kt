@@ -29,7 +29,7 @@ internal const val AUTHORIZED_CLIENT = "AUTHORIZED_CLIENT"
 const val URL_SERVER = "URL_SERVER"
 
 internal val NetworkModule by DI.Module {
-    bindConstant(URL_SERVER) { "http://82.97.249.229" }
+    bindConstant(URL_SERVER) { "https://16fb-185-7-93-247.ngrok-free.app/" }
     bindSingleton(BASE_CLIENT) {
         httpClient(instance(URL_SERVER))
             .apply {

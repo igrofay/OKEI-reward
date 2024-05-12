@@ -6,6 +6,6 @@ import edu.okei.reward.common.model.UIState
 sealed class CalendarPlanState: UIState(){
     data object Load : CalendarPlanState()
     data class MonthProgress(
-        val model: MonthlyProgressModel
+        val monthlyProgress: MonthlyProgressModel
     ) : CalendarPlanState()
 }

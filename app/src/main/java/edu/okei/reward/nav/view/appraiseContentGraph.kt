@@ -1,13 +1,12 @@
 package edu.okei.reward.nav.view
 
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import edu.okei.reward.calculation_of_reward.view.CalculationOfRewardScreen
 import edu.okei.reward.calendar_plan.view.CalendarPlanScreen
 import edu.okei.reward.criteria.view.AddOrEditCriteriaScreen
 import edu.okei.reward.criteria.view.CriteriaScreen
@@ -36,6 +35,10 @@ fun NavGraphBuilder.appraiseContentGraph(
                 openTeachersInMonth = {monthIndex->
                     navController
                         .navigate(AppraiserContentRouting.Teachers.getRoute(monthIndex))
+                },
+                openCalculationOfReward ={
+                    navController
+                        .navigate(AppraiserContentRouting.CalculationOfReward.route)
                 }
             )
         }
@@ -93,6 +96,9 @@ fun NavGraphBuilder.appraiseContentGraph(
                     navController.popBackStack()
                 }
             )
+        }
+        composable(AppraiserContentRouting.CalculationOfReward.route){
+            CalculationOfRewardScreen()
         }
     }
 }

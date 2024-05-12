@@ -32,6 +32,9 @@ sealed class AppraiserContentRouting(route: String) : AppRouting(route) {
             if (idCriterion != null) "${Companion.route}_add_or_edit_criterion?idCriterion=${idCriterion}"
             else "${Companion.route}_add_or_edit_criterion"
     }
+    data object CalculationOfReward : AppraiserContentRouting(
+        "${Companion.route}_calculation_of_reward"
+    )
 
     companion object {
         const val route = "appraiser_content_routing"

@@ -5,7 +5,7 @@ import edu.okei.core.data.body.teacher.TeacherBody
 import edu.okei.core.data.data_source.network.AdminApi
 import edu.okei.core.data.data_source.network.TeacherApi
 import edu.okei.core.domain.model.errors.AppErrors
-import edu.okei.core.domain.model.errors.UserManagementErrors
+import edu.okei.core.domain.model.errors.UserManagementError
 import edu.okei.core.domain.model.teacher.TeacherModel
 import edu.okei.core.domain.model.user.UserRole
 import edu.okei.core.domain.repos.UsersManagementRepos
@@ -36,7 +36,7 @@ internal class UsersManagementReposImpl(
         val answer = adminApi.addUser(NewUserBody(fio, role))
         when (answer.status) {
             HttpStatusCode.OK -> true
-            HttpStatusCode.BadRequest -> throw UserManagementErrors.InvalidNameFormat
+            HttpStatusCode.BadRequest -> throw UserManagementError.InvalidNameFormat
             else -> throw AppErrors.UnhandledError(answer.status.toString())
         }
     }

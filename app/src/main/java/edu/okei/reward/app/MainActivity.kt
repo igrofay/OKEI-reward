@@ -1,7 +1,11 @@
 package edu.okei.reward.app
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
@@ -33,4 +37,5 @@ class MainActivity : ComponentActivity(), DIAware {
             }
         }
     }
+
 }

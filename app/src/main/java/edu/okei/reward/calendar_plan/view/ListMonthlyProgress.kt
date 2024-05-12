@@ -23,15 +23,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,19 +67,19 @@ fun ListMonthlyProgress(
         )
     ) {
         item {
-            MonthReportItem(state.model.currentMonth){
+            MonthReportItem(state.monthlyProgress.currentMonth){
                 eventBase.onEvent(
                     CalendarPlanEvent.SeeTeachersInMonth(
-                        state.model.currentMonth.monthIndex
+                        state.monthlyProgress.currentMonth.monthIndex
                     )
                 )
             }
         }
         item {
-            MonthReportItem(state.model.previousMonth){
+            MonthReportItem(state.monthlyProgress.previousMonth){
                 eventBase.onEvent(
                     CalendarPlanEvent.SeeTeachersInMonth(
-                        state.model.previousMonth.monthIndex
+                        state.monthlyProgress.previousMonth.monthIndex
                     )
                 )
             }
@@ -91,11 +89,11 @@ fun ListMonthlyProgress(
 
 
 @Composable
-fun MonthReportItem(
+private fun MonthReportItem(
     monthReport: MonthlyProgressModel.MonthReportModel,
     onClick: ()->Unit
 ) {
-    var isVisibleTopTeacherAndProgress by remember {
+    var isVisibleTopTeacherAndProgress by rememberSaveable() {
         mutableStateOf(false)
     }
     Column(

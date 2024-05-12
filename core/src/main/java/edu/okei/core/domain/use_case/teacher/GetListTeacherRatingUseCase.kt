@@ -10,7 +10,7 @@ class GetListTeacherRatingUseCase(
             val trimSearchText = searchText.trim()
             if (trimSearchText.isNotBlank()) list.filter { model->
                 model.fullname.contains(trimSearchText, ignoreCase = true)
-            }
-            else list
+            }.sortedBy { it.fullname }
+            else list.sortedBy { it.fullname }
         }
 }

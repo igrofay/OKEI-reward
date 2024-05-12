@@ -6,4 +6,6 @@ sealed class CalendarPlanEvent : UIEvent() {
     data object SeeCriteria : CalendarPlanEvent()
     data object SeeTeacher : CalendarPlanEvent()
     data class SeeTeachersInMonth(val mothIndex: Int) : CalendarPlanEvent()
+    data object UpdateMonthlyProgress : CalendarPlanEvent()
+    data object SeeRewards : CalendarPlanEvent()
 }

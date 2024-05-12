@@ -3,7 +3,7 @@ package edu.okei.reward.teachers.view_model
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import edu.okei.core.domain.model.errors.AddOrEditError
-import edu.okei.core.domain.model.errors.UserManagementErrors
+import edu.okei.core.domain.model.errors.UserManagementError
 import edu.okei.core.domain.use_case.teacher.AddTeacherUseCase
 import edu.okei.reward.R
 import edu.okei.reward.common.view_model.AppVM
@@ -52,7 +52,7 @@ class AddOrEditTeacherVM(
 
     override fun onError(er: Throwable) {
         when(er){
-            UserManagementErrors.InvalidNameFormat -> intent {
+            UserManagementError.InvalidNameFormat -> intent {
                 postSideEffect(AddOrEditTeacherSideEffect.ShowMessage(R.string.invalid_name_format))
             }
             AddOrEditError.DataFilledInIncorrectly -> intent {

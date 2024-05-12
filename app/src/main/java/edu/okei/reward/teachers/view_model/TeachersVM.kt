@@ -35,7 +35,7 @@ class TeachersVM(
     private val deleteTeacherUseCase by di.instance<DeleteTeacherUseCase>()
     private val getListTeacherRatingUseCase by di.instance<GetListTeacherRatingUseCase>()
     private val monthIndex = savedStateHandle.get<String>("monthIndex")?.toInt()
-    private val isEdit = monthIndex == null
+    private val isManagement = monthIndex == null
     private var searchTeacherJob: Job? = null
     override val container: Container<TeachersState, TeachersSideEffect> = viewModelScope
         .container(TeachersState.Load) {
@@ -52,7 +52,7 @@ class TeachersVM(
             }
             TeachersEvent.UpdateListTeacher -> updateList()
             is TeachersEvent.SeeTeacherCriteria -> blockingIntent {
-                if (!isEdit) postSideEffect(
+                if (!isManagement) postSideEffect(
                     TeachersSideEffect.OpenTeacherCriteria(
                         monthIndex!!,
                         event.teacherId
@@ -78,7 +78,7 @@ class TeachersVM(
 
     // Receiving data
     private fun loadTeachers() = intent {
-        if (isEdit)
+        if (isManagement)
             getTeachersUseCase.execute()
                 .onFailure(::onError)
                 .onSuccess { list ->
@@ -93,16 +93,27 @@ class TeachersVM(
     }
 
     private fun updateList() = intent {
-        val targetState = state as? TeachersState.TeacherManagement ?: return@intent
-        getTeachersUseCase.execute(targetState.searchText)
-            .onFailure(::onError)
-            .onSuccess { list ->
-                reduce {
-                    targetState.copy(
-                        listTeacher = list
-                    )
+        if (isManagement){
+            val targetState = state as? TeachersState.TeacherManagement ?: return@intent
+            getTeachersUseCase.execute(targetState.searchText)
+                .onFailure(::onError)
+                .onSuccess { list ->
+                    reduce {
+                        targetState.copy(
+                            listTeacher = list
+                        )
+                    }
                 }
-            }
+        }else{
+            Log.e(nameVM, (state as? TeachersState.TeacherRating).toString())
+            val targetState = state as? TeachersState.TeacherRating ?: return@intent
+            getListTeacherRatingUseCase.execute(monthIndex!!)
+                .onFailure(::onError)
+                .onSuccess { list ->
+                    reduce { targetState.copy(listTeacher = list) }
+                }
+        }
+
     }
 
     // Receiving data
@@ -124,7 +135,7 @@ class TeachersVM(
 
     private fun searchTeachers(text: String) = intent {
         delay(500)
-        if (isEdit) {
+        if (isManagement) {
             val result =
                 getTeachersUseCase.execute(text)
             if (result.isFailure) return@intent onError(result.exceptionOrNull()!!)

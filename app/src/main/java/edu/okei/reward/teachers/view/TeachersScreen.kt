@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,6 +34,9 @@ fun TeachersScreen(
     openTeacherCriteria: (monthIndex: Int, teacherId: String)-> Unit,
 ) {
     val teachersVM by rememberVM<TeachersVM>()
+    LaunchedEffect(Unit){
+        teachersVM.onEvent(TeachersEvent.UpdateListTeacher)
+    }
     val state by teachersVM.collectAsState()
     val listState = rememberLazyListState()
     val isVisibleFirstItem by remember {

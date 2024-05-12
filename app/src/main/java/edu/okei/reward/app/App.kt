@@ -9,6 +9,7 @@ import org.kodein.di.bindProvider
 class App : Application(), DIAware {
     override val di by DI.lazy {
         bindProvider { applicationContext }
+        bindProvider { applicationContext.contentResolver }
         import(CoreModule)
     }
 }

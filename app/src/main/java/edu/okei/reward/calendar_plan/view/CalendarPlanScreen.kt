@@ -1,16 +1,16 @@
 package edu.okei.reward.calendar_plan.view
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,6 +33,7 @@ fun CalendarPlanScreen(
     openCriteria: ()->Unit,
     openTeachers: ()->Unit,
     openTeachersInMonth: (monthIndex: Int)->Unit,
+    openCalculationOfReward: ()->Unit,
 ) {
     val calendarPlanVM by rememberVM<CalendarPlanVM>()
     calendarPlanVM.collectSideEffect{sideEffect->
@@ -43,7 +44,12 @@ fun CalendarPlanScreen(
                 .OpenTeachers -> openTeachers()
             is CalendarPlanSideEffect
                 .OpenTeachersInMonth -> openTeachersInMonth(sideEffect.monthIndex)
+
+            CalendarPlanSideEffect.OpenRewards -> openCalculationOfReward()
         }
+    }
+    LaunchedEffect(calendarPlanVM){
+        calendarPlanVM.onEvent(CalendarPlanEvent.UpdateMonthlyProgress)
     }
     Scaffold(
         topBar = {
@@ -55,7 +61,7 @@ fun CalendarPlanScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.grid_4),
                 modifier = Modifier
-                    .padding()
+                    .padding(WindowInsets.navigationBars.asPaddingValues())
             ) {
                 FloatingButton(
                     icon = painterResource(R.drawable.ic_people)
@@ -70,26 +76,21 @@ fun CalendarPlanScreen(
                 FloatingButton(
                     icon = painterResource(R.drawable.ic_currency_ruble)
                 ) {
-
+                    calendarPlanVM.onEvent(CalendarPlanEvent.SeeRewards)
                 }
             }
         }
     ) { paddingValues->
         val state by calendarPlanVM.collectAsState()
-        AnimatedContent(
-            targetState = state,
-            label = "",
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) { targetState->
-            when(targetState){
+        Box(modifier = Modifier.padding(paddingValues)){
+            when (state) {
                 CalendarPlanState.Load -> LoadView()
                 is CalendarPlanState.MonthProgress -> ListMonthlyProgress(
-                    targetState,
+                    state as CalendarPlanState.MonthProgress,
                     calendarPlanVM
                 )
             }
         }
+
     }
 }

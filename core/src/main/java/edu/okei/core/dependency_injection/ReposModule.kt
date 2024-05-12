@@ -28,7 +28,7 @@ internal val ReposModule by DI.Module{
         UserReposImpl(instance<SharedPreferences>())
     }
     bindProvider<StatisticRepos>{
-        StatisticReposImpl(instance<StatsApi>())
+        new(::StatisticReposImpl)
     }
     bindProvider {
         new(::UsersManagementReposImpl)

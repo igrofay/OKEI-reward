@@ -15,12 +15,13 @@ class GetTeachersUseCase(
                     model.role == UserRole.Teacher &&
                             (model.fullname.contains(trimSearchText, ignoreCase = true) ||
                                     model.login.contains(trimSearchText, ignoreCase = true))
-                }
+                }.sortedBy { it.fullname }
             else
                 list.filter { model ->
                     model.role == UserRole.Teacher
-                }
+                }.sortedBy { it.fullname }
         }
     }
+
 
 }

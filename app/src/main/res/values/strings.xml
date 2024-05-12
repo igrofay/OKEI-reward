@@ -30,4 +30,27 @@
     <string name="create">Создать</string>
     <string name="indicator_value">Значение показателя</string>
     <string name="fill_in_blanks">Заполните все поля</string>
+    <string name="calculate">Рассчитать</string>
+    <string name="report">Отчёт</string>
+    <string name="fields_not_filled_in_correctly">Поля заполнены неправильно</string>
+    <string name="calculation_of_reward">Расчет премии</string>
+    <string name="list_teacher">Список преподавателей</string>
+    <string name="report_does_not_exist">Отчет не существует</string>
+    <string name="count_of_points">Количество очков</string>
+    <string-array name="months_array">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+    <string name="rub">руб.</string>
+    <string name="file_has_been_saved">Файл сохранен</string>
 </resources>
