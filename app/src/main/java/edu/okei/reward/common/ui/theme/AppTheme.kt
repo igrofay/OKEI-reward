@@ -61,11 +61,18 @@ fun AppTheme(
             else -> ShapesTV
         }
     }
+    val typography = remember(typeDevise) {
+        when(typeDevise){
+            TypeDevise.Phone -> TypographyPhone
+            TypeDevise.Table -> TypographyTable
+            else ->TypographyTable
+        }
+    }
     CompositionLocalProvider(LocalDimensions provides dimensions) {
         MaterialTheme(
             colors = colorsTheme,
             shapes = shapes,
-            typography = Typography,
+            typography = typography,
             content = content,
         )
     }
