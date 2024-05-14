@@ -29,6 +29,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import edu.okei.core.domain.model.statistics.MonthlyProgressModel
+import edu.okei.core.domain.model.user.shortenFullName
 import edu.okei.reward.R
 import edu.okei.reward.calendar_plan.model.CalendarPlanEvent
 import edu.okei.reward.calendar_plan.model.CalendarPlanState
@@ -217,8 +219,11 @@ private fun MonthReportItem(
                                     .width(MaterialTheme.dimensions.borderSmall)
                                     .background(MaterialTheme.colors.primary)
                             )
+                            val nameTeacher = remember(monthReport.ratingTeachers[position]) {
+                                shortenFullName(monthReport.ratingTeachers[position])
+                            }
                             Text(
-                                text = monthReport.ratingTeachers[position],
+                                text = nameTeacher,
                                 style = MaterialTheme.typography.overline
                                     .copy(color = MaterialTheme.colors.primary),
                                 modifier = Modifier

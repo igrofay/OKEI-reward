@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import edu.okei.core.domain.model.criteria.CriterionModel
 import edu.okei.core.domain.model.teacher.TeacherEvaluationModel
+import edu.okei.core.domain.model.user.shortenFullName
 import edu.okei.reward.R
 import edu.okei.reward.common.ui.click.alphaClick
 import edu.okei.reward.common.ui.theme.dimensions
@@ -117,7 +118,7 @@ fun EvaluatingTeacherOnCriteriaPager(
                     contentAlignment = Alignment.Center
                 ){
                     Text(
-                        text = state.teacherName,
+                        text = shortenFullName(state.teacherName),
                         style = MaterialTheme.typography.body1
                             .copy(color = MaterialTheme.colors.primary),
                     )

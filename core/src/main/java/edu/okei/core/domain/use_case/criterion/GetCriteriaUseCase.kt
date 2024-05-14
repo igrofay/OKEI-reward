@@ -8,12 +8,20 @@ class GetCriteriaUseCase(
 ){
     suspend fun execute(searchText: String = ""): Result<List<CriterionModel>> =
         criteriaRepos.getListCriterion().map {list->
-            val trimSearchText = searchText.trim()
-            val listSearch = if (trimSearchText.isNotBlank())  list.filter { model ->
+            filterCriteriaByText(list, searchText).sortedBy { it.serialNumber }
+        }
+    private fun filterCriteriaByText(
+        criteriaList: List<CriterionModel>,
+        searchText: String
+    ): List<CriterionModel> {
+        val trimSearchText = searchText.trim()
+        return if (trimSearchText.isNotBlank()) {
+            criteriaList.filter { model ->
                 model.name.contains(trimSearchText, ignoreCase = true) ||
                         model.description.contains(trimSearchText, ignoreCase = true)
             }
-            else list
-            listSearch.sortedBy { it.serialNumber }
+        } else {
+            criteriaList
         }
+    }
 }

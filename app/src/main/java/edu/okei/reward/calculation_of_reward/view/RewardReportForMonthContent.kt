@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import edu.okei.core.domain.model.statistics.TeachersRewardReportModel
+import edu.okei.core.domain.model.user.shortenFullName
 import edu.okei.reward.R
 import edu.okei.reward.calculation_of_reward.model.CalculationOfRewardState
 import edu.okei.reward.common.ui.theme.dimensions
@@ -80,7 +81,7 @@ private fun TeacherRewardItem(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = model.fullname,
+                text = shortenFullName(model.fullname),
                 style = MaterialTheme.typography.h5
                     .copy(
                         color = MaterialTheme.colors.primary,

@@ -8,15 +8,19 @@ import java.util.Locale
 class AddTeacherUseCase(
     private val usersManagementRepos: UsersManagementRepos,
 ) {
-    suspend fun execute(fio: String) : Result<Boolean>{
+    suspend fun execute(fio: String) : Result<Boolean> = runCatching{
         if (fio.isBlank()) throw AddOrEditError.DataFilledInIncorrectly
-        val correctionFIO = fio.trim()
-            .split(" ")
-            .joinToString(" ") { str ->
-                str.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-                }
+        val correctedFIO = formatFullName(fio)
+        return usersManagementRepos.addUser(correctedFIO, UserRole.Teacher)
+    }
+    private fun formatFullName(fio: String): String {
+        val trimmedFIO = fio.trim()
+        val nameParts = trimmedFIO.split(" ")
+        val formattedNameParts = nameParts.map { part ->
+            part.replaceFirstChar { char ->
+                if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString()
             }
-        return usersManagementRepos.addUser(correctionFIO, UserRole.Teacher)
+        }
+        return formattedNameParts.joinToString(" ")
     }
 }

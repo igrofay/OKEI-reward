@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import edu.okei.core.domain.model.teacher.TeacherModel
+import edu.okei.core.domain.model.user.shortenFullName
 import edu.okei.reward.R
 import edu.okei.reward.common.ui.click.alphaClick
 import edu.okei.reward.common.ui.edit_text.OutlinedEditText
@@ -116,7 +117,7 @@ private fun TeacherItem(
                 .spacedBy(MaterialTheme.dimensions.grid_2)
         ) {
             Text(
-                text = model.fullname,
+                text = shortenFullName(model.fullname),
                 style = MaterialTheme.typography.h5
                     .copy(
                         color = MaterialTheme.colors.primary,

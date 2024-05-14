@@ -8,20 +8,23 @@ class GetTeachersUseCase(
     private val usersManagementRepos: UsersManagementRepos,
 ) {
     suspend fun execute(searchText: String = ""): Result<List<TeacherModel>> {
-        val trimSearchText = searchText.trim()
         return usersManagementRepos.getAllUsers().map { list ->
-            if (trimSearchText.isNotBlank())
-                list.filter { model ->
-                    model.role == UserRole.Teacher &&
-                            (model.fullname.contains(trimSearchText, ignoreCase = true) ||
-                                    model.login.contains(trimSearchText, ignoreCase = true))
-                }.sortedBy { it.fullname }
-            else
-                list.filter { model ->
-                    model.role == UserRole.Teacher
-                }.sortedBy { it.fullname }
+            filterTeachersByText(list, searchText)
+                .filter { model -> model.role == UserRole.Teacher }
+                .sortedBy { it.fullname }
         }
     }
-
-
+    private fun filterTeachersByText(
+        listTeacher: List<TeacherModel>,
+        searchText: String,
+    ): List<TeacherModel> {
+        val trimSearchText = searchText.trim()
+        return if (trimSearchText.isNotBlank())
+            listTeacher.filter {model ->
+                (model.fullname.contains(trimSearchText, ignoreCase = true) ||
+                        model.login.contains(trimSearchText, ignoreCase = true))
+            }
+        else
+            listTeacher
+    }
 }

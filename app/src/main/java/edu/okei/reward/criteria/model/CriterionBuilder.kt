@@ -4,7 +4,7 @@ import edu.okei.core.domain.model.criteria.CriterionModel
 import edu.okei.core.domain.model.criteria.NewCriterionModel
 
 class CriterionBuilder(
-    private val listCriterion: List<CriterionModel>
+    private val listDescription: List<String>
 ) {
     private var name: String = ""
     private var description: String = ""
@@ -12,7 +12,7 @@ class CriterionBuilder(
     private val evaluationOptions: MutableList<NewCriterionModel.EvaluationOptionModel> = mutableListOf()
 
     fun suggestDescriptions(filter: String = ""): List<String> {
-        return listCriterion.map { it.description }.toSet()
+        return listDescription.toSet()
             .filter {
                 if (filter.isBlank()) true
                 else it.contains(filter, ignoreCase = true)

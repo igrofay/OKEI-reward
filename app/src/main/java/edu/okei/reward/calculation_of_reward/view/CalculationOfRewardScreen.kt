@@ -88,9 +88,7 @@ fun CalculationOfRewardScreen() {
             AppTopBar(
                 title = when (state) {
                     is CalculationOfRewardState.CreateReportForMonth ->
-                        stringArrayResource(R.array.months_array)[
-                            (state as CalculationOfRewardState.CreateReportForMonth).monthIndex.dec()
-                        ]
+                        getMonthName((state as CalculationOfRewardState.CreateReportForMonth).monthIndex)
                     is CalculationOfRewardState.ListMonthsOfReward ->
                         stringResource(R.string.calculation_of_reward)
 
@@ -171,4 +169,12 @@ fun CalculationOfRewardScreen() {
             }
         }
     }
+}
+
+@Composable
+private fun getMonthName(monthIndex: Int): String {
+    val itemPosition = monthIndex - 1
+    if (itemPosition !in 0..11) return "Недопустимый номер месяца"
+    val monthArray = stringArrayResource(R.array.months_array)
+    return monthArray.getOrElse(itemPosition) { "Недопустимый номер месяца" }
 }

@@ -68,7 +68,8 @@ class AddOrEditCriteriaVM(
         getCriteriaUseCase.execute()
             .onFailure(::onError)
             .onSuccess { list ->
-                builder = CriterionBuilder(list)
+                val listDescription = list.map { it.description }
+                builder = CriterionBuilder(listDescription)
                 reduce {
                     AddOrEditCriteriaState.AddOrEditCriteria(
                         examplesOfDescriptions = builder.suggestDescriptions(),
