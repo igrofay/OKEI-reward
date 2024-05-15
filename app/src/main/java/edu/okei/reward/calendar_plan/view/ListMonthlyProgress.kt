@@ -184,6 +184,7 @@ private fun MonthReportItem(
             Row(
                 modifier = Modifier
                     .padding(top = MaterialTheme.dimensions.grid_5_5)
+                    .height(IntrinsicSize.Min)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -242,8 +243,8 @@ private fun MonthReportItem(
                 CircularProgressBar(
                     percentage = monthReport.progress,
                     modifier = Modifier
-                        .scale(MaterialTheme.dimensions.coefficient)
-                        .size(140.dp)
+//                        .scale()
+                        .size(140.dp * MaterialTheme.dimensions.coefficient)
                 )
             }
     }

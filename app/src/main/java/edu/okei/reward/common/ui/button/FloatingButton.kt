@@ -41,8 +41,8 @@ fun FloatingButton(
             contentDescription = null,
             tint = MaterialTheme.colors.primary,
             modifier = Modifier
-                .scale(MaterialTheme.dimensions.coefficient)
-                .size(24.dp)
+//                .scale()
+                .size(24.dp * MaterialTheme.dimensions.coefficient)
         )
     }
 
