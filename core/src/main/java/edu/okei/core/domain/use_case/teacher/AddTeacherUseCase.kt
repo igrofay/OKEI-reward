@@ -16,11 +16,11 @@ class AddTeacherUseCase(
     private fun formatFullName(fio: String): String {
         val trimmedFIO = fio.trim()
         val nameParts = trimmedFIO.split(" ")
-        val formattedNameParts = nameParts.map { part ->
-            part.replaceFirstChar { char ->
-                if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString()
-            }
-        }
-        return formattedNameParts.joinToString(" ")
+//        val formattedNameParts = nameParts.map { part ->
+//            part.replaceFirstChar { char ->
+//                if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString()
+//            }
+//        }
+        return nameParts.joinToString(" ")
     }
 }
